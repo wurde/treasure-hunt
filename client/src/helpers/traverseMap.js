@@ -48,16 +48,14 @@ async function traverseMap() {
     for (let i = 0; i < response.data.exits.length; i++) {
       traversalGraph[currentRoomID][response.data.exits[i]] = "?"
     }
-    stack.push(currentRoomID)
 
     // DFS until dead end is hit
     let count = 0
     const interval = setInterval(async () => {
-      // if (Object.keys(traversalGraph).length === 500 ) {
-      if (count === 2) {
+      if (Object.keys(traversalGraph).length === 500 ) {
         clearInterval(interval)
       } else {
-        let prevRoomID = stack.pop()
+        let prevRoomID = currentRoomID
         let prevRoom = traversalGraph[prevRoomID]
 
         const unexploredExits = []
@@ -67,25 +65,28 @@ async function traverseMap() {
             unexploredExits.push(exits[i])
           }
         }
-        // room with no questions marks
-        // returns a direction
-        const direction = unexploredExits.pop() // room for improvement
+
+        let direction
+        if (unexploredExits.length > 0) {
+          direction = unexploredExits.pop()
+          stack.push(reverseDirection[direction])
+        } else {
+          direction = stack.pop()
+        }
 
         const moveRes = await axiosWithAuth().post(`${baseUrl}/api/adv/move/`, {
           "direction": direction
         })
-        const currentRoomID = moveRes.data.room_id;
+        currentRoomID = moveRes.data.room_id;
         if (!(currentRoomID in traversalGraph)) {
           traversalGraph[currentRoomID] = moveRes.data
           for (let i = 0; i < moveRes.data.exits.length; i++) {
             traversalGraph[currentRoomID][moveRes.data.exits[i]] = "?"
           }
-
-          traversalGraph[prevRoomID][direction] = currentRoomID
-          traversalGraph[currentRoomID][reverseDirection[direction]] = prevRoomID
-
-          stack.push(currentRoomID)
         }
+        traversalGraph[prevRoomID][direction] = currentRoomID
+        traversalGraph[currentRoomID][reverseDirection[direction]] = prevRoomID
+
         count += 1
 
         console.log('traversalGraph', traversalGraph)

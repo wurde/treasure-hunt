@@ -3,6 +3,7 @@
  */
 
 import axiosWithAuth from './axiosWithAuth';
+// import writeRoomJson from './writeRoomJson';
 
 /**
  * Constants
@@ -90,8 +91,10 @@ async function traverseMap() {
         count += 1
 
         console.log('traversalGraph', traversalGraph)
+        // writeRoomJson(traversalGraph)
+        localStorage.setItem('graph', JSON.stringify(traversalGraph))
       }
-    }, 20000) // FIX - needs to dynamically handle current cooldown.
+    }, 25000) // FIX - needs to dynamically handle current cooldown.
   } catch (error) {
     console.error(error)
   }

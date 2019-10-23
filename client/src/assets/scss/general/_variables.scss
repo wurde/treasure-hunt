@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:700,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+
+/* <----------DEFINITIONS----------> */
+
+// Colors
+
+$sushi: #6BB231;
+
+// Fonts
+
+$roboto: 'Roboto', sans-serif;
+$openSans: 'Open Sans', sans-serif;
+$poppins: 'Poppins', sans-serif;
+
+
+/* <----------USE CASES----------> */
+
+// Colors
+
+$sign-in-font-color: $sushi; 
+
+// FontS
+
+$large-font: $roboto;
+$body-font: $openSans;
+
+// Text size
+$name: 2vw;
+$title: 2vw;

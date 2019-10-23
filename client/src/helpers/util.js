@@ -7,7 +7,44 @@ const wait = seconds => {
   return new Promise((res, rej) => setTimeout(res, makeMS));
 };
 
-const pickItem = (object, encumberance) => {};
+const pickItem = async (prevRoom) => {
+  if (Object.keys(prevRoom.items).length === 0) {
+    return false;
+  }
+
+  try {
+    // Get current player status
+    const playerStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/status`);
+    await wait(playerStatus.data.cooldown);
+
+    const uniqItems = Array.from(new Set(prevRoom.items));
+    for (let i = 0; i < uniqItems.length; i++) {
+      const item = uniqItems[i];
+      // inspect item
+      const itemStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/examine`, { "name": item });
+      await wait(itemStatus.data.cooldown);
+
+      // check if item weight will exceed player strength if picked up
+      const weightAllowance = playerStatus.data.strength - playerStatus.data.encumbrance
+      const itemWeight = itemStatus.data.weight
+      if (itemWeight > weightAllowance) {
+        continue
+      } else {
+        const takeStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/take`, { "name": item });
+        await wait(takeStatus.data.cooldown);
+      }
+    }
+    
+    // do traversal to shop
+    // sell items
+
+    // If pickup item.
+    return true
+  } catch(err) {
+    console.log(err)
+    return false
+  }
+};
 
 const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
   try {
@@ -35,4 +72,4 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
   }
 };
 
-export { wait, moveWithWiseExplorer };
+export { wait, moveWithWiseExplorer, pickItem };

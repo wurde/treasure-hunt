@@ -56,8 +56,7 @@ async function traverseMap() {
 
     await wait(response.data.cooldown * 1000);
 
-    let count = 0;
-    while (Object.keys(traversalGraph).length <= 2) {
+    while (Object.keys(traversalGraph).length <= 500) {
       let prevRoomID = currentRoomID;
       let prevRoom = traversalGraph[prevRoomID];
 

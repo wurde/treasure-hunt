@@ -1,0 +1,15 @@
+/* <-------------Var & Mixins-------------> */
+
+@import './assets/scss/general/variables', './assets/scss/general/mixin';
+
+
+/* <--------Reset & Global styles--------> */
+
+@import './assets/scss/general/reset', './assets/scss/general/global';
+
+
+/* <-------------Components-------------> */
+
+@import './App.scss';
+
+/* <----------End of Components----------> */

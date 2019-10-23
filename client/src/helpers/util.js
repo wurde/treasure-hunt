@@ -25,6 +25,7 @@ const pickItem = async prevRoom => {
       `${baseUrl}/api/adv/status`
     );
     await wait(playerStatus.data.cooldown);
+    let encumbrance = playerStatus.data.encumbrance;
 
     const uniqItems = Array.from(new Set(prevRoom.items));
     for (let i = 0; i < uniqItems.length; i++) {
@@ -36,13 +37,18 @@ const pickItem = async prevRoom => {
       );
       await wait(itemStatus.data.cooldown);
 
-      // check if item weight will exceed player strength if picked up
-      const weightAllowance =
-        playerStatus.data.strength - playerStatus.data.encumbrance;
+      // Check if item weight will exceed player strength if picked up
+      const weightAllowance = playerStatus.data.strength - encumbrance - 1;
       const itemWeight = itemStatus.data.weight;
       if (itemWeight > weightAllowance) {
+        // do traversal to shop
+        // sell items
         continue;
       } else {
+        if (i > 0) {
+          encumbrance += itemStatus.data.weight;
+        }
+
         const takeStatus = await axiosWithAuth().post(
           `${baseUrl}/api/adv/take`,
           { name: item }
@@ -50,9 +56,6 @@ const pickItem = async prevRoom => {
         await wait(takeStatus.data.cooldown);
       }
     }
-
-    // do traversal to shop
-    // sell items
 
     // If pickup item.
     return true;
@@ -104,41 +107,6 @@ const generatePath = (startRoomId, destinationRoomId) => {
       }
     }
   }
-  // generate path of (n,s,e,w) direction from startRoom to endRoom using bfs
-  // queue and visited will be filled with room ids
-  // path will be directions
-  // add starting room to visitedRooms
-  // visitedRooms.add(startRoomId);
-  // // add all exit directions to q
-  // let exits = map[startRoomId].exits;
-  // for (let i = 0; i < exits.length; i++) {
-  //   queue.push([startRoomId, exits[i]]);
-  // }
-
-  // let currentRoom = map[startRoomId];
-
-  // while (queue.length > 0) {
-  //   let path = queue.pop();
-  //   let nextRoomID = map[path[0]][path[path.length - 1]];
-  //   // room at direction path[-1] from room path[0]
-  //   let nextRoom = map[nextRoomID];
-
-  //   // // visitedRooms.add(currentRoom.room_id);
-  //   if (!visitedRooms.has(currentRoom.room_id)) {
-  //     // add success check here
-
-  //     for (let i = 0; i < nextRoom.exits.length; i++) {
-  //       console.log(`Exit ${nextRoom.exits[i]} for ${nextRoom.room_id}`);
-  //       let newPath = path.slice(1);
-  //       newPath = [nextRoom.room_id, ...newPath, nextRoom.exits[i]];
-  //       // currentRoom = nextRoom;
-  //       queue.push(newPath);
-  //     }
-  //     currentRoom = nextRoom;
-  //     visitedRooms.add(currentRoom.room_id);
-  //   }
-  //   let roomId = path[path.length - 1];
-  // }
 };
 
 const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {

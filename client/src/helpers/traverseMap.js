@@ -44,11 +44,7 @@ async function traverseMap() {
     await wait(response.data.cooldown);
 
     let counter = 0;
-    let isPickingUpItems = false;
     while (Object.keys(traversalGraph).length <= 500) {
-      if (isPickingUpItems) {
-        break;
-      }
       let prevRoomID = currentRoomID;
       let prevRoom = traversalGraph[prevRoomID];
 
@@ -68,7 +64,7 @@ async function traverseMap() {
         direction = stack.pop();
       }
 
-      isPickingUpItems = await pickItem(prevRoom);
+      await pickItem(prevRoom);
 
       const moveRes = await moveWithWiseExplorer(prevRoomID, direction);
       currentRoomID = moveRes.data.room_id;

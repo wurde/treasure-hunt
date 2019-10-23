@@ -3,7 +3,7 @@
  */
 
 import axiosWithAuth from "./axiosWithAuth";
-
+import { wait } from "./util";
 /**
  * Constants
  */
@@ -20,25 +20,11 @@ const reverseDirection = {
  * Define Helpers
  */
 
-// const now = new Date();
-// const buffer = 5000; // 5 seconds
-// localStorage.setItem('cooldown', new Date(now.getTime() + response.data.cooldown * 1000 + buffer));
-
-// // Prevent all axiosWithAuth requests if active cooldown in localStorage.
-// const now = new Date();
-// const cooldown = new Date(localStorage.getItem('cooldown'));
-// if (now < cooldown) {
-//   throw Error('Cooldown still in effect.')
-// }
-
 /**
  * Define traversal algorithm
  */
 
 //  returns a promise that can be used to halt something for an allotted amount of time
-const wait = ms => {
-  return new Promise((res, rej) => setTimeout(res, ms));
-};
 
 async function traverseMap() {
   const traversalGraph = {};
@@ -92,8 +78,10 @@ async function traverseMap() {
       console.log("traversalGraph", traversalGraph);
       localStorage.setItem("graph", JSON.stringify(traversalGraph));
 
+      // waits to run next iteration of while loop until cooldown is ready
       await wait(moveRes.data.cooldown * 1000);
     }
+    console.info("Loop finished, graph filled");
   } catch (error) {
     console.error(error);
   }

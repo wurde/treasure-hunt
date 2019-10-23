@@ -3,7 +3,7 @@
  */
 
 import axiosWithAuth from "./axiosWithAuth";
-import { wait } from "./util";
+import { wait, moveWithWiseExplorer } from "./util";
 import { baseUrl } from "./constants";
 /**
  * Constants
@@ -40,8 +40,9 @@ async function traverseMap() {
       traversalGraph[currentRoomID][response.data.exits[i]] = "?";
     }
 
-    await wait(response.data.cooldown * 1000);
+    await wait(response.data.cooldown);
 
+    let counter = 0;
     while (Object.keys(traversalGraph).length <= 500) {
       let prevRoomID = currentRoomID;
       let prevRoom = traversalGraph[prevRoomID];
@@ -62,9 +63,7 @@ async function traverseMap() {
         direction = stack.pop();
       }
 
-      const moveRes = await axiosWithAuth().post(`${baseUrl}/api/adv/move/`, {
-        direction: direction
-      });
+      const moveRes = await moveWithWiseExplorer(prevRoomID, direction);
       currentRoomID = moveRes.data.room_id;
       if (!(currentRoomID in traversalGraph)) {
         traversalGraph[currentRoomID] = moveRes.data;
@@ -79,7 +78,7 @@ async function traverseMap() {
       localStorage.setItem("graph", JSON.stringify(traversalGraph));
 
       // waits to run next iteration of while loop until cooldown is ready
-      await wait(moveRes.data.cooldown * 1000);
+      await wait(moveRes.data.cooldown);
     }
     console.info("Loop finished, graph filled");
   } catch (error) {

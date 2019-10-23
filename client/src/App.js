@@ -1,5 +1,5 @@
-import React from 'react';
-import traverseMap from './helpers/traverseMap';
+import React from "react";
+import traverseMap from "./helpers/traverseMap";
 
 function App() {
   return (

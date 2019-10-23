@@ -1,5 +1,5 @@
-import React from 'react';
-import traverseMap from './helpers/traverseMap';
+import React from "react";
+import traverseMap from "./helpers/traverseMap";
 
 import Sidebar from './components/sidebar/Sidebar.js';
 import Map from './components/map/Map.js';

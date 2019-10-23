@@ -16,6 +16,7 @@ const pickItem = async (prevRoom) => {
     // Get current player status
     const playerStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/status`);
     await wait(playerStatus.data.cooldown);
+    let encumbrance = playerStatus.data.encumbrance;
 
     const uniqItems = Array.from(new Set(prevRoom.items));
     for (let i = 0; i < uniqItems.length; i++) {
@@ -24,19 +25,22 @@ const pickItem = async (prevRoom) => {
       const itemStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/examine`, { "name": item });
       await wait(itemStatus.data.cooldown);
 
-      // check if item weight will exceed player strength if picked up
-      const weightAllowance = playerStatus.data.strength - playerStatus.data.encumbrance
+      // Check if item weight will exceed player strength if picked up
+      const weightAllowance = playerStatus.data.strength - encumbrance - 1
       const itemWeight = itemStatus.data.weight
       if (itemWeight > weightAllowance) {
+        // do traversal to shop
+        // sell items
         continue
       } else {
+        if (i > 0) {
+          encumbrance += itemStatus.data.weight;
+        }
+
         const takeStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/take`, { "name": item });
         await wait(takeStatus.data.cooldown);
       }
     }
-    
-    // do traversal to shop
-    // sell items
 
     // If pickup item.
     return true

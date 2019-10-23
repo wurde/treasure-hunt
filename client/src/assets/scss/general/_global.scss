@@ -1,0 +1,31 @@
+// This file is to be used as the 'glue' of the components
+// any unspecific styles will go in his file.
+
+// * {
+// 	outline: none;
+// }
+
+h1, h2, h3, h4, h5, h6, p {
+	font-family: roboto;
+	color: white;
+}
+
+h1 {
+	font-size: 60px;
+}
+
+h2 {
+	font-size: 24px;
+}
+
+h3 {
+	font-size: 20px;
+}
+
+h4 {
+	font-size: 16px;
+}
+
+p {
+	font-size: 14px;
+}

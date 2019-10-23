@@ -1,0 +1,41 @@
+// -----------------------------------------------------
+
+// inside of file, use mixin media query as such
+
+// .className {
+//      font-size: 2rem;
+// 
+//      @include mobile {
+//          font-size: 1rem;
+//      }
+// }
+
+// -----------------------------------------------------
+
+// Mixins
+
+@mixin border {
+    border: 1px solid red;
+}
+
+// Media Queries
+
+@mixin small-mobile {
+    @media (max-width: 500px) { @content; }
+}
+
+@mixin mobile {
+    @media (max-width: 500px) { @content; }
+}
+
+@mixin tablet-landscape {
+    @media (max-width: 930px) { @content; }
+}
+
+@mixin tablet-portrait {
+    @media (max-width: 600px) { @content; }
+}
+
+@mixin small-desktop {
+    @media (max-width: 1550px) { @content; }
+}

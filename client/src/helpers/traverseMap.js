@@ -47,7 +47,7 @@ async function traverseMap() {
     let isPickingUpItems = false;
     while (Object.keys(traversalGraph).length <= 500) {
       if (isPickingUpItems) {
-        break
+        break;
       }
       let prevRoomID = currentRoomID;
       let prevRoom = traversalGraph[prevRoomID];
@@ -59,7 +59,7 @@ async function traverseMap() {
           unexploredExits.push(exits[i]);
         }
       }
-   
+
       let direction;
       if (unexploredExits.length > 0) {
         direction = unexploredExits.pop();
@@ -67,9 +67,9 @@ async function traverseMap() {
       } else {
         direction = stack.pop();
       }
-      
+
       isPickingUpItems = await pickItem(prevRoom);
-  
+
       const moveRes = await moveWithWiseExplorer(prevRoomID, direction);
       currentRoomID = moveRes.data.room_id;
       if (!(currentRoomID in traversalGraph)) {

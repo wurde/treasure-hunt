@@ -4,11 +4,11 @@
 
 import axiosWithAuth from "./axiosWithAuth";
 import { wait } from "./util";
+import { baseUrl } from "./constants";
 /**
  * Constants
  */
 
-const baseUrl = "https://lambda-treasure-hunt.herokuapp.com";
 const reverseDirection = {
   n: "s",
   s: "n",

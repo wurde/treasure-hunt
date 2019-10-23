@@ -1,0 +1,61 @@
+.Sidebar {
+	// padding: 0 2%;
+
+	.console {
+		width: 100%;
+		height: 260px;
+		background-color: black;
+      	border-radius: 12px;
+
+	}
+	
+	.dpad {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		margin: 2rem 0;
+		// border-radius: 20px;
+
+		.round-button {
+			width: 64px;
+			height: 62px;
+			border-radius: 50%;
+		}
+
+		.N {}
+		.E { margin-right: 22px; }
+		.W { margin-left: 22px; }
+		.S {}
+
+		.center {
+
+		}
+	}
+
+	.action-buttons {
+		display: flex;
+		justify-content: space-around;
+		margin-bottom: 50px;
+
+		.action-button {
+			width: 96px;
+			padding: 6px;
+			font-size: 18px;
+		}
+	}
+
+	@media screen and (max-width: 835px) {
+		.dpad {
+			.round-button {
+				margin: 5px 0;
+			}
+
+			.center {
+				display: flex;
+				flex-direction: column;
+			}
+		}
+	}
+}

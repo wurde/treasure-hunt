@@ -18,6 +18,7 @@ const Sidebar = () => {
     await setValidDirections(new Set(Object.keys(exits)));
 
     let stateRoom = { ...data, ...exits };
+    markCurrentRoom(data.room_id);
     setCurrentRoom(stateRoom);
   };
 
@@ -47,8 +48,20 @@ const Sidebar = () => {
     });
 
     const exits = generateDirections(moveRes.data.room_id);
+    markCurrentRoom(moveRes.data.room_id);
     setCurrentRoom({ ...moveRes.data, ...exits });
   };
+
+  let markCurrentRoom = roomId => {
+    let previousRoom = document.querySelector(`.currentRoom`);
+    if (previousRoom) {
+      previousRoom.classList.remove("currentRoom");
+    }
+    let room = document.querySelector(`div[value='${roomId}']`);
+    room.classList.add("currentRoom");
+    return room;
+  };
+
   useEffect(() => {
     getRoomData();
   }, []);

@@ -45,13 +45,14 @@ function hasExits(room) {
     specialRooms.pirateRy === room_id && (classes += " pirate");
     // room.room_id === 356 && (classes += " mine");
     items.length > 0 && (classes += " treasure");
+    return { classes, room_id };
   } else {
     classes = "noroom";
+    return { classes };
   }
-  return classes;
 }
 
-function Map() {
+const Map = () => {
   return (
     <div className="Map pannel">
       <div className="translucent"></div>
@@ -60,13 +61,18 @@ function Map() {
         {mapMatrix.map(row => (
           <div className="row">
             {row.map(room => (
-              <div className={hasExits(room)}>{room && room.room_id}</div>
+              <div
+                className={hasExits(room).classes}
+                value={hasExits(room).room_id}
+              >
+                {room && room.room_id}
+              </div>
             ))}
           </div>
         ))}
       </div>
     </div>
   );
-}
+};
 
 export default Map;

@@ -1,10 +1,18 @@
+/**
+ * Dependencies
+ */
+
 import React from 'react';
 import './Sidebar.scss';
 import { Button } from 'reactstrap';
-import axiosWithAuth from '../../helpers/axiosWithAuth.js';
-import mapData from '../../helpers/map'
+import axiosWithAuth from '../../helpers/axiosWithAuth';
+import mapData from '../../helpers/map';
 
 const baseUrl = 'https://lambda-treasure-hunt.herokuapp.com';
+
+/**
+ * Define component
+ */
 
 class Sidebar extends React.Component {
 	constructor() {
@@ -117,5 +125,9 @@ class Sidebar extends React.Component {
 		);
 	}
 }
+
+/**
+ * Export component
+ */
 
 export default Sidebar;

@@ -1,6 +1,10 @@
+/**
+ * Dependencies
+ */
+
 import React from 'react';
 import './Map.scss';
-import mapData from '../../helpers/map'
+import mapData from '../../helpers/map';
 
 let mapMatrix = []
 for (let i=0; i<29; i++) {
@@ -13,20 +17,21 @@ for (let i=0; i<29; i++) {
 }
 
 for (var room in mapData) {
-	let x = parseInt(mapData[room].coordinates.slice(1,3))
-	let y = parseInt(mapData[room].coordinates.slice(4,6))
-	mapMatrix[y-46][x-46] = mapData[room]
+	let x = parseInt(mapData[room].coordinates.slice(1,3));
+	let y = parseInt(mapData[room].coordinates.slice(4,6));
+	mapMatrix[y-46][x-46] = mapData[room];
 }
 
-mapMatrix.reverse()
+mapMatrix.reverse();
 
-console.log(mapMatrix)
-console.log(mapData[177])
+console.log(mapMatrix);
+console.log(mapData[177]);
 
-let classes = ''
+let classes = '';
 
 function hasExits(room) {
-	classes = 'room'
+	classes = 'room';
+
 	if (room) {
 		room.exits.includes('n') && (classes += ' north')
 		room.exits.includes('e') && (classes += ' east')
@@ -40,10 +45,14 @@ function hasExits(room) {
 		room.room_id === 356 && (classes += ' mine')
 		room.items.length > 0 && (classes += ' treasure')
 	} else {
-		classes = 'noroom'
+		classes = 'noroom';
 	}
-	return classes
+	return classes;
 }
+
+/**
+ * Define component
+ */
 
 function Map() {
   return (
@@ -64,5 +73,9 @@ function Map() {
     </div>
   );
 }
+
+/**
+ * Export component
+ */
 
 export default Map;

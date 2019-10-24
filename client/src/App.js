@@ -1,11 +1,19 @@
+/**
+ * Dependencies
+ */
+
 import React from "react";
 import traverseMap from "./helpers/traverseMap";
 import travelTo from "./helpers/travelTo";
 import startGoldFarming from "./helpers/startGoldFarming";
 import CheatCodes from './components/cheat-codes/CheatCodes';
-import Sidebar from './components/sidebar/Sidebar.js';
-import Map from './components/map/Map.js';
+import Sidebar from './components/sidebar/Sidebar';
+import Map from './components/map/Map';
 import { generatePath } from "./helpers/util";
+
+/**
+ * Define component
+ */
 
 function App() {
   function askTravelTo() {
@@ -43,5 +51,9 @@ function App() {
     </div>
   );
 }
+
+/**
+ * Export component
+ */
 
 export default App;

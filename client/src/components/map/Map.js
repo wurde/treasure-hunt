@@ -1,7 +1,6 @@
 import React from 'react';
 import './Map.scss';
-
-import mapData from '../../helpers/map.json'
+import mapData from '../../helpers/map'
 
 let mapMatrix = []
 for (let i=0; i<29; i++) {

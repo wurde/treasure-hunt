@@ -20,22 +20,21 @@ function App() {
         <Sidebar />
       </section>
 
-      <header className="App-header">
-        Maze
-        <button onClick={traverseMap} style={{ marginRight: '15px' }}>Traverse Map</button>
-        <button onClick={askTravelTo} style={{ marginRight: '15px' }}>Go To Room</button>
-        <button onClick={e => travelTo(1)} style={{ marginRight: '15px' }}>Go To Shop</button>
-        <button onClick={e => travelTo(22)} style={{ marginRight: '15px' }}>Go To The Peak of Mt. Holloway</button>
-        <button onClick={e => travelTo(55)} style={{ marginRight: '15px' }}>Go To Wishing Well</button>
-        <button onClick={e => travelTo(461)} style={{ marginRight: '15px' }}>Go To Linh's Shrine</button>
-        <button onClick={e => travelTo(467)} style={{ marginRight: '15px' }}>Go To Pirate Ry's</button>
-        <button onClick={e => travelTo(495)} style={{ marginRight: '15px' }}>Go To The Transmogriphier</button>
-        <button onClick={e => travelTo(499)} style={{ marginRight: '15px' }}>Go To Glasowyn's Grave</button>
-        <button onClick={startGoldFarming}>Start Gold Farming</button>
+      <div>
+        <button onClick={traverseMap} style={{ margin: '5px' }}>Traverse Map</button>
+        <button onClick={askTravelTo} style={{ margin: '5px' }}>Go To Room</button>
+        <button onClick={e => travelTo(1)} style={{ margin: '5px' }}>Go To Shop</button>
+        <button onClick={e => travelTo(22)} style={{ margin: '5px' }}>Go To The Peak of Mt. Holloway</button>
+        <button onClick={e => travelTo(55)} style={{ margin: '5px' }}>Go To Wishing Well</button>
+        <button onClick={e => travelTo(461)} style={{ margin: '5px' }}>Go To Linh's Shrine</button>
+        <button onClick={e => travelTo(467)} style={{ margin: '5px' }}>Go To Pirate Ry's</button>
+        <button onClick={e => travelTo(495)} style={{ margin: '5px' }}>Go To The Transmogriphier</button>
+        <button onClick={e => travelTo(499)} style={{ margin: '5px' }}>Go To Glasowyn's Grave</button>
+        <button onClick={startGoldFarming} style={{ margin: '5px' }}>Start Gold Farming</button>
         <button onClick={() => console.log(generatePath(499, 1))}>
           Generate path
         </button>
-      </header>
+      </div>
     </div>
   );
 }

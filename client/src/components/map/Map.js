@@ -20,8 +20,6 @@ for (var room in mapData) {
 
 mapMatrix.reverse();
 
-let classes = "";
-
 let specialRooms = {
   shrines: new Set([22, 461, 499]),
   well: 55,
@@ -31,10 +29,10 @@ let specialRooms = {
 };
 
 function hasExits(room) {
-  classes = "room";
+  let classes = "room";
 
   if (room) {
-    let { exits, description, title, room_id, items } = room;
+    let { exits, room_id, items } = room;
 
     exits.includes("n") && (classes += " north");
     exits.includes("e") && (classes += " east");

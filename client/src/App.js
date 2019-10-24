@@ -2,9 +2,9 @@ import React from "react";
 import traverseMap from "./helpers/traverseMap";
 import travelTo from "./helpers/travelTo";
 import startGoldFarming from "./helpers/startGoldFarming";
-
 import Sidebar from './components/sidebar/Sidebar.js';
 import Map from './components/map/Map.js';
+import { generatePath } from "./helpers/util";
 
 function App() {
   function askTravelTo() {
@@ -19,7 +19,7 @@ function App() {
         <Map />
         <Sidebar />
       </section>
-      
+
       <header className="App-header">
         Maze
         <button onClick={traverseMap} style={{ marginRight: '15px' }}>Traverse Map</button>
@@ -32,6 +32,9 @@ function App() {
         <button onClick={e => travelTo(495)} style={{ marginRight: '15px' }}>Go To The Transmogriphier</button>
         <button onClick={e => travelTo(499)} style={{ marginRight: '15px' }}>Go To Glasowyn's Grave</button>
         <button onClick={startGoldFarming}>Start Gold Farming</button>
+        <button onClick={() => console.log(generatePath(499, 1))}>
+          Generate path
+        </button>
       </header>
     </div>
   );

@@ -6,10 +6,6 @@ import axiosWithAuth from "./axiosWithAuth";
 import { wait, moveWithWiseExplorer, pickItem } from "./util";
 import { baseUrl } from "./constants";
 
-/**
- * Constants
- */
-
 const reverseDirection = {
   n: "s",
   s: "n",
@@ -22,7 +18,6 @@ const reverseDirection = {
  */
 
 //  returns a promise that can be used to halt something for an allotted amount of time
-
 async function traverseMap() {
   const traversalGraph = {};
   const stack = [];
@@ -39,7 +34,6 @@ async function traverseMap() {
 
     await wait(response.data.cooldown);
 
-    let counter = 0;
     while (Object.keys(traversalGraph).length <= 500) {
       let prevRoomID = currentRoomID;
       let prevRoom = traversalGraph[prevRoomID];
@@ -51,7 +45,7 @@ async function traverseMap() {
           unexploredExits.push(exits[i]);
         }
       }
-   
+
       let direction;
       if (unexploredExits.length > 0) {
         direction = unexploredExits.pop();
@@ -61,7 +55,7 @@ async function traverseMap() {
       }
 
       await pickItem(prevRoom);
-  
+
       const moveRes = await moveWithWiseExplorer(prevRoomID, direction);
       currentRoomID = moveRes.data.room_id;
       if (!(currentRoomID in traversalGraph)) {

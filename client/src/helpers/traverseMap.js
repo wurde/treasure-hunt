@@ -67,6 +67,7 @@ async function traverseMap() {
       }
 
       const moveRes = await moveWithPerks(prevRoomID, direction);
+
       currentRoomID = moveRes.data.room_id;
       if (!(currentRoomID in traversalGraph)) {
         traversalGraph[currentRoomID] = moveRes.data;
@@ -77,7 +78,6 @@ async function traverseMap() {
       traversalGraph[prevRoomID][direction] = currentRoomID;
       traversalGraph[currentRoomID][reverseDirection[direction]] = prevRoomID;
 
-      console.log("traversalGraph", traversalGraph);
       localStorage.setItem("graph", JSON.stringify(traversalGraph));
 
       // waits to run next iteration of while loop until cooldown is ready

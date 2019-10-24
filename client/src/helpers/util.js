@@ -88,11 +88,7 @@ const pickItem = async prevRoom => {
     const uniqItems = Array.from(new Set(prevRoom.items));
     for (let i = 0; i < uniqItems.length; i++) {
       const item = uniqItems[i];
-      // inspect item
-      if (item !== "shiny treasure") {
-        await wait(itemStatus.data.cooldown);
-        break;
-      }
+
       const itemStatus = await axiosWithAuth().post(
         `${baseUrl}/api/adv/examine`,
         { name: item }
@@ -118,11 +114,8 @@ const pickItem = async prevRoom => {
         encumbrance += itemStatus.data.weight;
       }
     }
-
-    return true;
   } catch (err) {
     console.log(err);
-    return false;
   }
 };
 
@@ -136,7 +129,7 @@ const movePlayerToDestination = async destinationRoomId => {
 
     await wait(roomInfo.data.cooldown);
 
-    console.log(movePath, destinationRoomId);
+    console.log(`Going to ${destinationRoomId} in ${movePath.length} steps`);
     while (movePath.length > 0) {
       const moveDirection = movePath.pop();
       const newRoom = await moveWithPerks(roomId, moveDirection);

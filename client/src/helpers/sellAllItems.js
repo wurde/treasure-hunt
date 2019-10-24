@@ -16,8 +16,10 @@ async function sellAllItems() {
     // Get current player status.
     const playerStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/status`);
     console.log('playerStatus', playerStatus);
-    const { cooldown, inventory } = playerStatus.data;
+    let { cooldown, inventory } = playerStatus.data;
     await wait(cooldown);
+
+    inventory = inventory.filter(item => item.match(/treasure/))
 
     // Sell all of your current inventory
     for (let i = 0; i < inventory.length; i++) {

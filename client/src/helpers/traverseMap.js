@@ -18,10 +18,6 @@ const reverseDirection = {
 };
 
 /**
- * Define Helpers
- */
-
-/**
  * Define traversal algorithm
  */
 
@@ -63,7 +59,7 @@ async function traverseMap() {
       } else {
         direction = stack.pop();
       }
-      
+
       await pickItem(prevRoom);
   
       const moveRes = await moveWithWiseExplorer(prevRoomID, direction);

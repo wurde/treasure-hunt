@@ -50,7 +50,62 @@ const pickItem = async (prevRoom) => {
   }
 };
 
-const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
+const generatePath = (startRoomID, destinationRoomID) => {
+  const visited = new Set();
+  const previousRooms = {};
+
+  const queue = [];  
+  queue.push(startRoomID);
+
+  while(queue.length > 0) {
+    const roomID = queue.shift();
+    
+    if (!(visited.has(roomID))) {
+      visited.add(roomID);
+
+      if (roomID === destinationRoomID) {
+        let currentRoomID = destinationRoomID;
+        let path = [];
+        
+        while (currentRoomID !== startRoomID) {
+          path.push(currentRoomID);
+          currentRoomID = previousRooms[currentRoomID];
+        }
+        path.push(startRoomID);
+
+        for (let i = 0; i < path.length - 1; i++) {
+          let roomAID = path[i];
+          let roomBID = path[i+1];
+          let roomA = map[roomAID];
+          
+          if (roomA['n'] === roomBID) {
+            path[i] = 's';
+          } else if (roomA['s'] === roomBID) {
+            path[i] = 'n';
+          } else if (roomA['e'] === roomBID) {
+            path[i] = 'w';
+          } else if (roomA['w'] === roomBID) {
+            path[i] = 'e';
+          }
+        }
+        path.pop();
+
+        return path;
+      }
+
+      const room = map[roomID];
+      for (let i = 0; i < room.exits.length; i++) {
+        const adjacentRoomID = room[room.exits[i]];
+        if (!(adjacentRoomID in previousRooms)) {
+          previousRooms[adjacentRoomID] = roomID;
+        }
+        queue.push(adjacentRoomID);
+      }
+    }
+  }
+}
+
+const moveWithWiseExplorer = async (roomId, direction, cooldown = 0, hasFlight = false) => {
   try {
     // search graph for roomId
     let room = map[roomId];
@@ -61,13 +116,18 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
       await wait(cooldown);
     }
 
+    let moveEndpoint = `${baseUrl}/api/adv/move/`;
+    if (hasFlight) {
+      moveEndpoint = `${baseUrl}/api/adv/fly/`;
+    }
+
     // make move request with extra next_direction param
     const postBody = {
       direction,
       next_room_id: `${nextRoomId}`
     };
     const newRoom = await axiosWithAuth().post(
-      `${baseUrl}/api/adv/move/`,
+      moveEndpoint,
       postBody
     );
     return newRoom;
@@ -76,4 +136,4 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
   }
 };
 
-export { wait, moveWithWiseExplorer, pickItem };
+export { wait, moveWithWiseExplorer, pickItem, generatePath };

@@ -7,6 +7,71 @@ const wait = seconds => {
   return new Promise((res, rej) => setTimeout(res, makeMS));
 };
 
+const pickUpAllPerks = async () => {
+  try {
+    let shrineRooms = [22, 461, 499];
+
+    while (shrineRooms.length > 0) {
+      const destinationRoom = shrineRooms.pop(0);
+      const finalRoom = await movePlayerToDestination(destinationRoom);
+      const prayerResult = await pray();
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const examineWishingWell = async () => {
+  try {
+    const goToWishingWell = await movePlayerToDestination(55);
+    const getLS8 = await axiosWithAuth().post(`${baseUrl}/api/adv/examine`, {
+      name: "well"
+    });
+    await wait(getLS8.data.cooldown);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const pray = async () => {
+  try {
+    const prayerResult = await axiosWithAuth().post(`${baseUrl}/api/adv/pray`);
+    console.log(prayerResult.data.messages);
+    await wait(prayerResult.data.cooldown);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const sellTreasures = async () => {
+  const playerStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/status`);
+
+  const playerTreasures = playerStatus.data.inventory.filter(item => {
+    return item.includes("treasure");
+  });
+
+  await wait(playerStatus.data.cooldown);
+
+  while (playerTreasures.length > 0) {
+    let treasure = playerTreasures.pop();
+
+    try {
+      const item = {
+        name: treasure,
+        confirm: "yes"
+      };
+      const sellResult = await axiosWithAuth().post(
+        `${baseUrl}/api/adv/sell`,
+        item
+      );
+      console.log(sellResult.data.messages);
+      await wait(sellResult.data.cooldown);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+};
+
 const pickItem = async prevRoom => {
   if (Object.keys(prevRoom.items).length === 0) {
     return false;
@@ -23,7 +88,7 @@ const pickItem = async prevRoom => {
     const uniqItems = Array.from(new Set(prevRoom.items));
     for (let i = 0; i < uniqItems.length; i++) {
       const item = uniqItems[i];
-      // inspect item
+
       const itemStatus = await axiosWithAuth().post(
         `${baseUrl}/api/adv/examine`,
         { name: item }
@@ -35,25 +100,8 @@ const pickItem = async prevRoom => {
       const itemWeight = itemStatus.data.weight;
 
       if (itemWeight > weightAllowance) {
-        const roomInfo = await axiosWithAuth().get(`${baseUrl}/api/adv/init`);
-        let roomID = roomInfo.data.room_id;
-        const userChoice = window
-          .prompt("Inventory is full, would you like to visit the shop?", "Y/N")
-          .toLowerCase();
-
-        if (userChoice === "y") {
-          const path = generatePath(roomID, 1);
-          while (path.length > 0) {
-            let moveDirection = path.pop();
-            const newRoom = await moveWithWiseExplorer(roomID, moveDirection);
-            roomID = newRoom.data.room_id;
-            console.log("moved to new room");
-            console.table(newRoom.data);
-            await wait(newRoom.data.cooldown);
-          }
-        } else {
-          console.log("Heard ya loud and clear, keep on walking!");
-        }
+        await movePlayerToDestination(1);
+        await sellTreasures();
       } else {
         const takeStatus = await axiosWithAuth().post(
           `${baseUrl}/api/adv/take`,
@@ -65,15 +113,52 @@ const pickItem = async prevRoom => {
         encumbrance += itemStatus.data.weight;
       }
     }
-
-    return true;
   } catch (err) {
     console.log(err);
-    return false;
   }
 };
 
-const generatePath = (startRoomId, destinationRoomId) => {
+const movePlayerToDestination = async (
+  destinationRoomId,
+  callback = undefined
+) => {
+  try {
+    const roomInfo = await axiosWithAuth().get(`${baseUrl}/api/adv/init`);
+
+    let roomId = roomInfo.data.room_id;
+
+    const { directions: movePath } = await generatePath(
+      roomId,
+      destinationRoomId
+    );
+
+    console.log("move path", movePath);
+
+    await wait(roomInfo.data.cooldown);
+
+    while (movePath.length > 0) {
+      const moveDirection = movePath.pop();
+      const newRoom = await moveWithPerks(roomId, moveDirection);
+      if (callback) {
+        callback(newRoom.data);
+      }
+      roomId = newRoom.data.room_id;
+      markCurrentRoom(roomId);
+      await wait(newRoom.data.cooldown);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const generatePath = async (startRoomId = undefined, destinationRoomId) => {
+  if (!startRoomId) {
+    const initData = await axiosWithAuth().get(`${baseUrl}/api/adv/init`);
+
+    startRoomId = initData.data.room_id;
+    await wait(initData.data.cooldown);
+  }
+
   const queue = [];
   let visitedRooms = new Set();
   let startingRoom = map[startRoomId];
@@ -102,8 +187,11 @@ const generatePath = (startRoomId, destinationRoomId) => {
         let directions = path.filter(item => {
           return validDirections.has(item);
         });
+        let numbers = path.filter(item => {
+          return !validDirections.has(item);
+        });
         // return directions array
-        return directions;
+        return { directions, numbers };
       }
 
       // add room id to visited rooms
@@ -125,21 +213,14 @@ const generatePath = (startRoomId, destinationRoomId) => {
   }
 };
 
-const moveWithWiseExplorer = async (roomId, direction, cooldown = 0, hasFlight = false) => {
+const moveWithPerks = async (roomId, direction, callback = undefined) => {
   try {
     // search graph for roomId
     let room = map[roomId];
     // search found roomID for direction being moved
     let nextRoomId = room[direction];
 
-    if (cooldown > 0) {
-      await wait(cooldown);
-    }
-
-    let moveEndpoint = `${baseUrl}/api/adv/move/`;
-    if (hasFlight) {
-      moveEndpoint = `${baseUrl}/api/adv/fly/`;
-    }
+    let moveEndpoint = `${baseUrl}/api/adv/fly/`;
 
     // make move request with extra next_direction param
     const postBody = {
@@ -147,13 +228,37 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0, hasFlight =
       next_room_id: `${nextRoomId}`
     };
     const newRoom = await axiosWithAuth().post(
-      moveEndpoint,
+      `${baseUrl}/api/adv/fly/`,
       postBody
     );
+    if (callback) {
+      callback(newRoom.data);
+    }
+    markCurrentRoom(newRoom.data.room_id);
     return newRoom;
   } catch (err) {
     console.error(err);
   }
 };
 
-export { wait, moveWithWiseExplorer, pickItem, generatePath };
+const markCurrentRoom = roomId => {
+  let previousRoom = document.querySelector(`.currentRoom`);
+  if (previousRoom) {
+    previousRoom.classList.remove("currentRoom");
+  }
+  let room = document.querySelector(`div[value='${roomId}']`);
+  room.classList.add("currentRoom");
+  return room;
+};
+export {
+  wait,
+  moveWithPerks,
+  pickItem,
+  generatePath,
+  sellTreasures,
+  pray,
+  pickUpAllPerks,
+  movePlayerToDestination,
+  examineWishingWell,
+  markCurrentRoom
+};

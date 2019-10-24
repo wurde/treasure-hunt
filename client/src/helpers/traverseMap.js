@@ -3,7 +3,16 @@
  */
 
 import axiosWithAuth from "./axiosWithAuth";
-import { wait, moveWithWiseExplorer, pickItem } from "./util";
+import {
+  wait,
+  moveWithPerks,
+  pickItem,
+  sellTreasures,
+  pickUpAllPerks,
+  movePlayerToDestination,
+  examineWishingWell
+} from "./util";
+
 import { baseUrl } from "./constants";
 
 const reverseDirection = {
@@ -13,12 +22,7 @@ const reverseDirection = {
   w: "e"
 };
 
-/**
- * Define traversal algorithm
- */
-
-//  returns a promise that can be used to halt something for an allotted amount of time
-async function traverseMap() {
+async function traverseMap(callback = undefined) {
   const traversalGraph = {};
   const stack = [];
 
@@ -56,7 +60,19 @@ async function traverseMap() {
 
       await pickItem(prevRoom);
 
-      const moveRes = await moveWithWiseExplorer(prevRoomID, direction);
+      switch (prevRoomID) {
+        case 1:
+          await sellTreasures();
+          break;
+      }
+
+      let moveRes = null;
+      if (callback) {
+        moveRes = await moveWithPerks(prevRoomID, direction, callback);
+      } else {
+        moveRes = await moveWithPerks(prevRoomID, direction);
+      }
+
       currentRoomID = moveRes.data.room_id;
       if (!(currentRoomID in traversalGraph)) {
         traversalGraph[currentRoomID] = moveRes.data;
@@ -67,7 +83,6 @@ async function traverseMap() {
       traversalGraph[prevRoomID][direction] = currentRoomID;
       traversalGraph[currentRoomID][reverseDirection[direction]] = prevRoomID;
 
-      console.log("traversalGraph", traversalGraph);
       localStorage.setItem("graph", JSON.stringify(traversalGraph));
 
       // waits to run next iteration of while loop until cooldown is ready

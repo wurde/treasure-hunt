@@ -6,6 +6,8 @@ import React from 'react';
 import travelTo from "../../helpers/travelTo";
 import traverseMap from "../../helpers/traverseMap";
 import startGoldFarming from "../../helpers/startGoldFarming";
+import earnNewPowers from "../../helpers/earnNewPowers";
+import examineWishingWell from "../../helpers/examineWishingWell";
 import { generatePath } from "../../helpers/util";
 
 /**
@@ -26,13 +28,11 @@ function CheatCodes() {
 				<h3 className="text-black">Cheat Codes</h3>
 				<button onClick={askTravelTo} className="m-1 btn btn-sm btn-primary">Go To Room</button>
 				<button onClick={e => travelTo(1)} className="m-1 btn btn-sm btn-primary">Go To Shop</button>
-				<button onClick={e => travelTo(22)} className="m-1 btn btn-sm btn-primary">Go To The Peak of Mt. Holloway</button>
-				<button onClick={e => travelTo(55)} className="m-1 btn btn-sm btn-primary">Go To Wishing Well</button>
-				<button onClick={e => travelTo(461)} className="m-1 btn btn-sm btn-primary">Go To Linh's Shrine</button>
 				<button onClick={e => travelTo(467)} className="m-1 btn btn-sm btn-primary">Go To Pirate Ry's</button>
 				<button onClick={e => travelTo(495)} className="m-1 btn btn-sm btn-primary">Go To The Transmogriphier</button>
-				<button onClick={e => travelTo(499)} className="m-1 btn btn-sm btn-primary">Go To Glasowyn's Grave</button>
+				<button onClick={earnNewPowers} className="m-1 btn btn-sm btn-primary">Earn New Powers</button>
 				<button onClick={startGoldFarming} className="m-1 btn btn-sm btn-primary">Start Gold Farming</button>
+				<button onClick={examineWishingWell} className="m-1 btn btn-sm btn-primary">Examine Wishing Well</button>
 				<button onClick={traverseMap} className="m-1 btn btn-sm btn-primary">Traverse Map</button>
 				<button onClick={() => console.log(generatePath(499, 1))} className="m-1 btn btn-sm btn-primary">
 					Generate path

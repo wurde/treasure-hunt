@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from "react";
-import "./Sidebar.scss";
 
-import { Button } from "reactstrap";
 import axiosWithAuth from "../../helpers/axiosWithAuth.js";
 import mapData from "../../helpers/map.json";
+import { Button, Alert } from "reactstrap";
+import { wait } from "../../helpers/util";
+import "./Sidebar.scss";
 
 const baseUrl = "https://lambda-treasure-hunt.herokuapp.com";
 
 const Sidebar = () => {
   const [currentRoom, setCurrentRoom] = useState("");
   const [validDirections, setValidDirections] = useState(new Set());
+  const [roomDestination, setRoomDestination] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
 
+  const selectRoom = async () => {
+    return <Alert color="light">Click a room to move there!</Alert>;
+  };
   const getRoomData = async () => {
     const { data } = await axiosWithAuth().get(`${baseUrl}/api/adv/init/`);
 
@@ -38,15 +44,16 @@ const Sidebar = () => {
     console.log(direction);
 
     if (!currentRoom[direction]) {
-      console.warn(`You can't move ${direction}`);
+      setAlertMessage(`You cannot move ${direction}`);
       return null;
-    } else {
     }
     const moveRes = await axiosWithAuth().post(`${baseUrl}/api/adv/fly/`, {
       direction,
       next_room_id: currentRoom[direction].toString()
     });
+    console.log(moveRes.data);
 
+    setAlertMessage(moveRes.data.messages.join(", "));
     const exits = generateDirections(moveRes.data.room_id);
     markCurrentRoom(moveRes.data.room_id);
     setCurrentRoom({ ...moveRes.data, ...exits });
@@ -72,7 +79,6 @@ const Sidebar = () => {
     return (
       <div className="Sidebar pannel">
         <div className="translucent"></div>
-
         <div className="console">
           <p>
             Room #{currentRoom.room_id} : {currentRoom.title}
@@ -82,6 +88,11 @@ const Sidebar = () => {
           <p>Items: {itemsString}</p>
           <p>Exits: {exitsString} </p>
           <p>Cooldown: {currentRoom.cooldown}</p>
+          <div className="info-box">
+            <Alert color="light">
+              {alertMessage || "Messages will appear here"}
+            </Alert>
+          </div>
         </div>
 
         <div className="dpad">
@@ -127,6 +138,20 @@ const Sidebar = () => {
           </Button>
           <Button className="action-button" color="primary">
             Drop
+          </Button>
+        </div>
+
+        <div className="traverse-buttons">
+          <Button className="action-button" color="primary">
+            Traverse Map
+          </Button>
+          <Button
+            className="action-button"
+            color="primary"
+            value={roomDestination}
+            onClick={() => selectRoom()}
+          >
+            Go To Room
           </Button>
         </div>
       </div>

@@ -57,6 +57,15 @@
     }
   }
 
+  .traverse-buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .info-box {
+    margin-top: 15px;
+    text-align: center;
+  }
   @media screen and (max-width: 835px) {
     .dpad {
       .round-button {

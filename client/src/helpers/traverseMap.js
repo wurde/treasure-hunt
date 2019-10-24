@@ -3,7 +3,7 @@
  */
 
 import axiosWithAuth from "./axiosWithAuth";
-import { wait, moveWithWiseExplorer, pickItem } from "./util";
+import { wait, moveWithWiseExplorer, pickItem, sellItems } from "./util";
 import { baseUrl } from "./constants";
 
 const reverseDirection = {
@@ -51,6 +51,9 @@ async function traverseMap() {
 
       await pickItem(prevRoom);
 
+      if (prevRoomID === 1) {
+        await sellItems();
+      }
       const moveRes = await moveWithWiseExplorer(prevRoomID, direction);
       currentRoomID = moveRes.data.room_id;
       if (!(currentRoomID in traversalGraph)) {

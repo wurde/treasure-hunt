@@ -7,6 +7,39 @@ const wait = seconds => {
   return new Promise((res, rej) => setTimeout(res, makeMS));
 };
 
+const sellItems = async () => {
+  const playerStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/status`);
+
+  const playerTreasures = playerStatus.data.inventory.filter(item => {
+    return item.includes("treasure");
+  });
+
+  await wait(playerStatus.data.cooldown);
+
+  while (playerTreasures.length > 0) {
+    let treasure = playerTreasures.pop();
+
+    const playerChoice = window
+      .prompt(`Would you like to sell ${treasure}?`, "Y/N")
+      .toLowerCase();
+
+    if (playerChoice === "y") {
+      const item = {
+        name: treasure,
+        confirm: "yes"
+      };
+      const sellResult = await axiosWithAuth().post(
+        `${baseUrl}/api/adv/sell`,
+        item
+      );
+      console.log(sellResult.data.messages);
+      await wait(sellResult.data.cooldown);
+    } else {
+      console.log(`Did not sell item ${treasure}`);
+    }
+  }
+};
+
 const pickItem = async prevRoom => {
   if (Object.keys(prevRoom.items).length === 0) {
     return false;
@@ -47,10 +80,9 @@ const pickItem = async prevRoom => {
             let moveDirection = path.pop();
             const newRoom = await moveWithWiseExplorer(roomID, moveDirection);
             roomID = newRoom.data.room_id;
-            console.log("moved to new room");
-            console.table(newRoom.data);
             await wait(newRoom.data.cooldown);
           }
+          await sellItems();
         } else {
           console.log("Heard ya loud and clear, keep on walking!");
         }
@@ -151,4 +183,4 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
   }
 };
 
-export { wait, moveWithWiseExplorer, pickItem, generatePath };
+export { wait, moveWithWiseExplorer, pickItem, generatePath, sellItems };

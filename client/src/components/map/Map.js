@@ -59,17 +59,17 @@ function Map() {
     <div className="Map pannel">
     	<div className="translucent"></div>
 
-		<div className="map-display">
-			{mapMatrix.map(row => (
-				<div className="row">
-					{row.map(room => (
-						<div className={hasExits(room)}>
-							{room && room.room_id}
-						</div>
-					))}
-				</div>
-			))}
-		</div>
+			<div className="map-display">
+				{mapMatrix.map(row => (
+					<div className="row">
+						{row.map(room => (
+							<div className={hasExits(room)}>
+								{room && room.room_id}
+							</div>
+						))}
+					</div>
+				))}
+			</div>
     </div>
   );
 }

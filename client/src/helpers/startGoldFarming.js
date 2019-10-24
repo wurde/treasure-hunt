@@ -28,12 +28,37 @@ async function startGoldFarming() {
       console.log('playerStatus', playerStatus);
       const { cooldown, strength, encumbrance } = playerStatus.data;
       await wait(cooldown);
-      
+
+      /**
+       * 
+       */
+
       let weightAllowance = strength - encumbrance - 1;
-      const stack = [];
-      const traversalGraph = {};
+      let stack = [];
+      let traversalGraph = {};
+      console.log('weightAllowance', weightAllowance)
+
+      const initStatus = await axiosWithAuth().get(`${baseUrl}/api/adv/init/`);
+      console.log('initStatus', initStatus);
+      await wait(initStatus.data.cooldown);
+
+      let currentRoomID = initStatus.data.room_id;
+      traversalGraph[currentRoomID] = initStatus.data;
+      for (let i = 0; i < initStatus.data.exits.length; i++) {
+        traversalGraph[currentRoomID][initStatus.data.exits[i]] = "?";
+      }
       while (weightAllowance > 1) {
-        weightAllowance = await pickupTreasure(stack, traversalGraph);
+        const [
+          newWeightAllowance,
+          newTraversalGraph,
+          newStack,
+          newCurrentRoomID
+        ] = await pickupTreasure(stack, traversalGraph, weightAllowance, currentRoomID);
+        weightAllowance = newWeightAllowance;
+        traversalGraph = newTraversalGraph;
+        stack = newStack;
+        currentRoomID = newCurrentRoomID;
+        console.log('weightAllowance', weightAllowance)
       }
 
       await travelTo(shopRoomID);

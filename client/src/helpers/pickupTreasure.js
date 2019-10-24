@@ -21,20 +21,8 @@ const reverseDirection = {
  * Define helper
  */
 
-async function pickupTreasure(stack, traversalGraph) {
+async function pickupTreasure(stack, traversalGraph, weightAllowance, currentRoomID) {
   console.log('pickupTreasure()', traversalGraph);
-  let weightAllowance;
-
-  const initStatus = await axiosWithAuth().get(`${baseUrl}/api/adv/init/`);
-  console.log('initStatus', initStatus);
-  await wait(initStatus.data.cooldown);
-
-  let currentRoomID = initStatus.data.room_id;
-  traversalGraph[currentRoomID] = initStatus.data;
-  for (let i = 0; i < initStatus.data.exits.length; i++) {
-    traversalGraph[currentRoomID][initStatus.data.exits[i]] = "?";
-  }
-  
   let prevRoomID = currentRoomID;
   let prevRoom = traversalGraph[prevRoomID];
 
@@ -66,26 +54,29 @@ async function pickupTreasure(stack, traversalGraph) {
     let encumbrance = playerStatus.data.encumbrance;
     weightAllowance = playerStatus.data.strength - encumbrance - 1;
 
+    const itemWeights = {};
     const uniqItems = Array.from(new Set(prevRoom.items));
     for (let i = 0; i < uniqItems.length; i++) {
       const item = uniqItems[i];
       const itemStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/examine`, { "name": item });
       console.log('itemStatus', itemStatus);
       await wait(itemStatus.data.cooldown);
+      itemWeights[item] = itemStatus.data.weight;
+    }
+
+    for (let i = 0; i < prevRoom.items.length; i++) {
+      const item = prevRoom.items[i];
+      const itemWeight = itemWeights[prevRoom.items[i]];
 
       // Check if item weight will exceed player strength if picked up
-      const itemWeight = itemStatus.data.weight;
       if (itemWeight > weightAllowance) {
         continue
       } else {
-        if (i > 0) {
-          encumbrance += itemStatus.data.weight;
-          weightAllowance = playerStatus.data.strength - encumbrance - 1;
-        }
-
         const takeStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/take`, { "name": item });
         console.log('takeStatus', takeStatus);
         await wait(takeStatus.data.cooldown);
+        encumbrance += itemWeight;
+        weightAllowance = playerStatus.data.strength - encumbrance - 1;
       }
     }
   }
@@ -108,10 +99,10 @@ async function pickupTreasure(stack, traversalGraph) {
   traversalGraph[currentRoomID][reverseDirection[direction]] = prevRoomID;
 
   /**
-   * Return current weightAllowance
+   * Return current state.
    */
 
-  return weightAllowance;
+  return [weightAllowance, traversalGraph, stack, currentRoomID];
 }
 
 /**

@@ -29,10 +29,6 @@ async function startGoldFarming() {
       const { cooldown, strength, encumbrance } = playerStatus.data;
       await wait(cooldown);
 
-      /**
-       * 
-       */
-
       let weightAllowance = strength - encumbrance - 1;
       let stack = [];
       let traversalGraph = {};

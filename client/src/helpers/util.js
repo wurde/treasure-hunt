@@ -67,25 +67,6 @@ const sellItems = async () => {
     } catch (err) {
       console.error(err);
     }
-    // const playerChoice = window
-    //   .prompt(`Would you like to sell ${treasure}?`, "Y/N")
-    //   .toLowerCase();
-
-    // if (playerChoice === "y") {
-    //   const item = {
-    //     name: treasure,
-    //     confirm: "yes"
-    //   };
-    //   const sellResult = await axiosWithAuth().post(
-    //     `${baseUrl}/api/adv/sell`,
-    //     item
-    //   );
-    //   console.log(sellResult.data.messages);
-    //   await wait(sellResult.data.cooldown);
-    // }
-    // else {
-    //   console.log(`Did not sell item ${treasure}`);
-    // }
   }
 };
 
@@ -117,24 +98,9 @@ const pickItem = async prevRoom => {
       const itemWeight = itemStatus.data.weight;
 
       if (itemWeight > weightAllowance) {
-        const roomInfo = await axiosWithAuth().get(`${baseUrl}/api/adv/init`);
-        let roomID = roomInfo.data.room_id;
-        const userChoice = window
-          .prompt("Inventory is full, would you like to visit the shop?", "Y/N")
-          .toLowerCase();
-
-        if (userChoice === "y") {
-          const path = generatePath(roomID, 1);
-          while (path.length > 0) {
-            let moveDirection = path.pop();
-            const newRoom = await moveWithPerks(roomID, moveDirection);
-            roomID = newRoom.data.room_id;
-            await wait(newRoom.data.cooldown);
-          }
-          await sellItems();
-        } else {
-          console.log("Heard ya loud and clear, keep on walking!");
-        }
+        console.info("Inventory full, going to shop");
+        await movePlayerToDestination(1);
+        await sellItems();
       } else {
         const takeStatus = await axiosWithAuth().post(
           `${baseUrl}/api/adv/take`,

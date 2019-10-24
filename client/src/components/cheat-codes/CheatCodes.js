@@ -8,7 +8,6 @@ import traverseMap from "../../helpers/traverseMap";
 import startGoldFarming from "../../helpers/startGoldFarming";
 import earnNewPowers from "../../helpers/earnNewPowers";
 import examineWishingWell from "../../helpers/examineWishingWell";
-import { generatePath } from "../../helpers/util";
 
 /**
  * Define component
@@ -34,9 +33,6 @@ function CheatCodes() {
 				<button onClick={startGoldFarming} className="m-1 btn btn-sm btn-primary">Start Gold Farming</button>
 				<button onClick={examineWishingWell} className="m-1 btn btn-sm btn-primary">Examine Wishing Well</button>
 				<button onClick={traverseMap} className="m-1 btn btn-sm btn-primary">Traverse Map</button>
-				<button onClick={() => console.log(generatePath(499, 1))} className="m-1 btn btn-sm btn-primary">
-					Generate path
-				</button>
 			</div>
 		</div>
 	)

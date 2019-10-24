@@ -7,12 +7,7 @@ import './Sidebar.scss';
 import { Button } from 'reactstrap';
 import axiosWithAuth from '../../helpers/axiosWithAuth';
 import mapData from '../../helpers/map';
-
-/**
- * Constants
- */
-
-const baseUrl = 'https://lambda-treasure-hunt.herokuapp.com';
+import { baseUrl } from "../../helpers/constants";
 
 /**
  * Define component

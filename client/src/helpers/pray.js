@@ -13,6 +13,7 @@ import { baseUrl } from "./constants";
 async function pray() {
   try {
     const prayStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/pray/`);
+    console.log('prayStatus', prayStatus);
     await wait(prayStatus.data.cooldown);
 
     return true;

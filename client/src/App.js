@@ -15,12 +15,12 @@ function App() {
   return (
     <div className="App">
       <h1 className="title">Treasure Hunter</h1>
-      <section className="main-section">
+      <section className="section">
         <Map />
         <Sidebar />
       </section>
 
-      <section>
+      <section className="section">
         <CheatCodes />
       </section>
     </div>

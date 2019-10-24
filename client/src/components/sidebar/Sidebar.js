@@ -8,6 +8,10 @@ import { Button } from 'reactstrap';
 import axiosWithAuth from '../../helpers/axiosWithAuth';
 import mapData from '../../helpers/map';
 
+/**
+ * Constants
+ */
+
 const baseUrl = 'https://lambda-treasure-hunt.herokuapp.com';
 
 /**
@@ -39,7 +43,7 @@ class Sidebar extends React.Component {
 	}
 
 	async componentDidMount() {
-		this.init()
+		// this.init()
 	}
 
 	init = async () => {

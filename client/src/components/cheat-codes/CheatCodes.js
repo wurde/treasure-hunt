@@ -19,7 +19,9 @@ function CheatCodes() {
 	}
 
 	return (
-		<>
+		<div className="CheatCodes pannel">
+			<div className="translucent"></div>
+
 			<button onClick={traverseMap} style={{ margin: '5px' }}>Traverse Map</button>
 			<button onClick={askTravelTo} style={{ margin: '5px' }}>Go To Room</button>
 			<button onClick={e => travelTo(1)} style={{ margin: '5px' }}>Go To Shop</button>
@@ -33,7 +35,7 @@ function CheatCodes() {
 			<button onClick={() => console.log(generatePath(499, 1))}>
 				Generate path
 			</button>
-		</>
+		</div>
 	)
 }
 

@@ -105,26 +105,29 @@ class CPU {
   load(message) {
     try {
       let address = 0;
+      let lines = message.split('\n');
 
-      console.log('message', message);
-      // lines = f.readlines()
-      // for line in lines:
-      //     # Process comments: Ignore anything after a # symbol
-      //     comment_split = line.split("#")
+      // Filter for only machine code.
+      lines = lines.filter(line => line.match(/^[01]{8}$/));
 
-      //     # Convert any numbers from binary strings to integers
-      //     num = comment_split[0].strip()
-      //     try:
-      //         val = int(num, 2)
-      //     except ValueError:
-      //         continue
+      for (let i = 0; i < lines.length; i++) {
+        let val;
 
-      //     this.ram[address] = val
-      //     address += 1
+        try {
+          // Convert any numbers from binary strings to integers
+          val = parseInt(lines[i], 2);
+        } catch (e) {
+          continue;
+        }
+
+        this.ram[address] = val
+        address += 1
+      }
     } catch (e) {
       console.error(e);
       process.exit(2);
     }
+    console.log('this.ram', this.ram);
   }
 
   /**

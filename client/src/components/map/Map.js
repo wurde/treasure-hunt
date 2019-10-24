@@ -35,10 +35,10 @@ function hasExits(room) {
 		room.exits.includes('w') && (classes += ' west')
 		room.description.includes('well') && (classes += ' well')
 		room.description.includes('shrine') && (classes += ' shrine')
-		room.description.includes('pirate') && (classes += ' pirate')
 		room.description.includes('shop') && (classes += ' shop')
 		room.title.includes('Transmogri') && (classes += ' transmogri')
 		room.description.includes('Pirate') && (classes += ' pirate')
+		room.room_id === 356 && (classes += ' mine')
 		room.items.length > 0 && (classes += ' treasure')
 	} else {
 		classes = 'noroom'

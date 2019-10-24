@@ -12,13 +12,6 @@ const pickItem = async prevRoom => {
     return false;
   }
 
-  const reverseDirection = {
-    n: "s",
-    s: "n",
-    e: "w",
-    w: "e"
-  };
-
   try {
     // Get current player status
     const playerStatus = await axiosWithAuth().post(
@@ -40,24 +33,39 @@ const pickItem = async prevRoom => {
       // Check if item weight will exceed player strength if picked up
       const weightAllowance = playerStatus.data.strength - encumbrance - 1;
       const itemWeight = itemStatus.data.weight;
-      if (itemWeight > weightAllowance) {
-        // do traversal to shop
-        // sell items
-        continue;
-      } else {
-        if (i > 0) {
-          encumbrance += itemStatus.data.weight;
-        }
 
+      if (itemWeight > weightAllowance) {
+        const roomInfo = await axiosWithAuth().get(`${baseUrl}/api/adv/init`);
+        let roomID = roomInfo.data.room_id;
+        const userChoice = window
+          .prompt("Inventory is full, would you like to visit the shop?", "Y/N")
+          .toLowerCase();
+
+        if (userChoice === "y") {
+          const path = generatePath(roomID, 1);
+          while (path.length > 0) {
+            let moveDirection = path.pop();
+            const newRoom = await moveWithWiseExplorer(roomID, moveDirection);
+            roomID = newRoom.data.room_id;
+            console.log("moved to new room");
+            console.table(newRoom.data);
+            await wait(newRoom.data.cooldown);
+          }
+        } else {
+          console.log("Heard ya loud and clear, keep on walking!");
+        }
+      } else {
         const takeStatus = await axiosWithAuth().post(
           `${baseUrl}/api/adv/take`,
           { name: item }
         );
         await wait(takeStatus.data.cooldown);
       }
+      if (i > 0) {
+        encumbrance += itemStatus.data.weight;
+      }
     }
 
-    // If pickup item.
     return true;
   } catch (err) {
     console.log(err);
@@ -92,17 +100,25 @@ const generatePath = (startRoomId, destinationRoomId) => {
 
         // filter path for valid movement directions
         let directions = path.filter(item => {
-          //eslint-disable-next-line
           return validDirections.has(item);
         });
-        // return directions in reverse to get proper order
-        return directions.reverse();
+        // return directions array
+        return directions;
       }
+
+      // add room id to visited rooms
       visitedRooms.add(room);
+
+      // get current room data from map
       let roomObject = map[room];
+
       for (let i = 0; i < roomObject.exits.length; i++) {
+        // direction player is moving in
         let direction = roomObject.exits[i];
+        // new path to get stored on queue with direction, the current path and room id in given direction
+
         let newPath = [direction, ...path, roomObject[direction]];
+        // add new path to front of array
         queue.unshift(newPath);
       }
     }
@@ -135,4 +151,4 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
   }
 };
 
-export { wait, moveWithWiseExplorer, pickItem, generatePath, reverseDirection };
+export { wait, moveWithWiseExplorer, pickItem, generatePath };

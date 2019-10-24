@@ -220,6 +220,8 @@ const moveWithPerks = async (roomId, direction, callback = undefined) => {
     // search found roomID for direction being moved
     let nextRoomId = room[direction];
 
+    let moveEndpoint = `${baseUrl}/api/adv/fly/`;
+
     // make move request with extra next_direction param
     const postBody = {
       direction,

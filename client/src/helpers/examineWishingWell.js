@@ -155,6 +155,57 @@ class CPU {
   ram_read(pc) {
     return this.ram[pc];
   }
+
+  ram_write(pc, instruction) {
+    this.ram[pc] = instruction;
+  }
+
+  handle_nop() {
+    continue
+  }
+
+  handle_hlt() {
+    this.running = false;
+  }
+
+  handle_ret() {
+    const register = this.ram_read(this.reg[SP]);
+    this.reg[SP] += 1;
+    this.pc += register - 1;
+  }
+
+  handle_call() {
+    const reg_a = this.reg[this.ram_read(this.pc + 1)];
+    this.reg[SP] -= 1;
+    this.ram_write(htis.reg[SP], this.pc + 2);
+    this.pc = reg_a;
+  }
+
+  handle_jmp() {
+    const reg_a = this.reg[this.ram_read(this.pc + 1)];
+    this.pc = reg_a - 1;
+  }
+
+  handle_jeq() {
+    const reg_a = this.reg[this.ram_read(this.pc + 1)];
+    if (this.fl === 1) {
+      // If equal flag is true, jump to the address stored in register.
+      this.pc = reg_a - 1;
+    } else {
+      this.pc += 1;
+    }
+  }
+
+  handle_jne() {
+    const reg_a = this.reg[this.ram_read(this.pc + 1)];
+    if (this.fl > 1) {
+      // If equal flag is false, jump to the address stored in register.
+      this.pc = reg_a - 1;
+    } else {
+      this.pc += 1;
+    }
+  }
+
 }
 
 /**

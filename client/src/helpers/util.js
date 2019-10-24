@@ -20,6 +20,17 @@ const pickUpAllPerks = async () => {
   }
 };
 
+const examineWishingWell = async () => {
+  try {
+    const goToWishingWell = await movePlayerToDestination(55);
+    const getLS8 = await axiosWithAuth().post(`${baseUrl}/api/adv/examine`, {
+      name: "well"
+    });
+    await wait(getLS8.data.cooldown);
+  } catch (err) {
+    console.error(err);
+  }
+};
 const pray = async () => {
   try {
     const prayerResult = await axiosWithAuth().post(`${baseUrl}/api/adv/pray`);
@@ -42,11 +53,7 @@ const sellItems = async () => {
   while (playerTreasures.length > 0) {
     let treasure = playerTreasures.pop();
 
-    const playerChoice = window
-      .prompt(`Would you like to sell ${treasure}?`, "Y/N")
-      .toLowerCase();
-
-    if (playerChoice === "y") {
+    try {
       const item = {
         name: treasure,
         confirm: "yes"
@@ -57,9 +64,28 @@ const sellItems = async () => {
       );
       console.log(sellResult.data.messages);
       await wait(sellResult.data.cooldown);
-    } else {
-      console.log(`Did not sell item ${treasure}`);
+    } catch (err) {
+      console.error(err);
     }
+    // const playerChoice = window
+    //   .prompt(`Would you like to sell ${treasure}?`, "Y/N")
+    //   .toLowerCase();
+
+    // if (playerChoice === "y") {
+    //   const item = {
+    //     name: treasure,
+    //     confirm: "yes"
+    //   };
+    //   const sellResult = await axiosWithAuth().post(
+    //     `${baseUrl}/api/adv/sell`,
+    //     item
+    //   );
+    //   console.log(sellResult.data.messages);
+    //   await wait(sellResult.data.cooldown);
+    // }
+    // else {
+    //   console.log(`Did not sell item ${treasure}`);
+    // }
   }
 };
 
@@ -236,5 +262,6 @@ export {
   sellItems,
   pray,
   pickUpAllPerks,
-  movePlayerToDestination
+  movePlayerToDestination,
+  examineWishingWell
 };

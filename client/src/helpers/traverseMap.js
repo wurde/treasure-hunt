@@ -9,7 +9,8 @@ import {
   pickItem,
   sellItems,
   pickUpAllPerks,
-  movePlayerToDestination
+  movePlayerToDestination,
+  examineWishingWell
 } from "./util";
 
 import { baseUrl } from "./constants";

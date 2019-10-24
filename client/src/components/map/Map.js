@@ -4,11 +4,10 @@ import './Map.scss';
 import mapData from '../../helpers/map.json'
 
 let mapMatrix = []
-
 for (let i=0; i<29; i++) {
 	console.log('here')
 	let row = []
-	for (var j=0; j<24; j++) {
+	for (var j=0; j<32; j++) {
 		row.push(null)
 	}
 	mapMatrix.push(row)
@@ -17,10 +16,10 @@ for (let i=0; i<29; i++) {
 for (var room in mapData) {
 	let x = parseInt(mapData[room].coordinates.slice(1,3))
 	let y = parseInt(mapData[room].coordinates.slice(4,6))
-	mapMatrix[y-46][x-50] = mapData[room]
+	mapMatrix[y-46][x-46] = mapData[room]
 }
 
-// mapMatrix.reverse()
+mapMatrix.reverse()
 
 console.log(mapMatrix)
 console.log(mapData[177])
@@ -34,6 +33,15 @@ function hasExits(room) {
 		room.exits.includes('e') && (classes += ' east')
 		room.exits.includes('s') && (classes += ' south')
 		room.exits.includes('w') && (classes += ' west')
+		room.description.includes('well') && (classes += ' well')
+		room.description.includes('shrine') && (classes += ' shrine')
+		room.description.includes('pirate') && (classes += ' pirate')
+		room.description.includes('shop') && (classes += ' shop')
+		room.title.includes('Transmogri') && (classes += ' transmogri')
+		room.description.includes('Pirate') && (classes += ' pirate')
+		room.items.length > 0 && (classes += ' treasure')
+	} else {
+		classes = 'noroom'
 	}
 	return classes
 }

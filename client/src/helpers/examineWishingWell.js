@@ -161,7 +161,7 @@ class CPU {
   }
 
   handle_nop() {
-    continue
+    // continue
   }
 
   handle_hlt() {
@@ -177,7 +177,7 @@ class CPU {
   handle_call() {
     const reg_a = this.reg[this.ram_read(this.pc + 1)];
     this.reg[SP] -= 1;
-    this.ram_write(htis.reg[SP], this.pc + 2);
+    this.ram_write(this.reg[SP], this.pc + 2);
     this.pc = reg_a;
   }
 
@@ -206,6 +206,142 @@ class CPU {
     }
   }
 
+  handle_push() {
+    const register = this.ram_read(this.pc + 1);
+    const val = this.reg[register];
+    this.reg[SP] -= 1;
+    this.ram_write(this.reg[SP], val);
+    this.pc += 1;
+  }
+
+  handle_pop() {
+    const register = this.ram_read(this.pc + 1);
+    const val = this.ram_read(this.reg[SP]);
+    this.reg[register] = val;
+    this.reg[SP] += 1;
+    this.pc += 1;
+  }
+
+  handle_pra() {
+    const reg_a = this.ram_read(this.pc + 1);
+    console.log(this.reg[reg_a]); // TEMP chr()
+    this.pc += 1;
+  }
+  
+  handle_prn() {
+    const reg_a = this.ram_read(this.pc + 1);
+    console.log(this.reg[reg_a]);
+    this.pc += 1;
+  }
+
+  handle_ldi() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const val = this.ram_read(this.pc + 2);
+    this.reg[reg_a] = val;
+    this.pc += 2;
+  }
+  
+  handle_ld() {
+    // TEMP exactly same as LDI?
+    const reg_a = this.ram_read(this.pc + 1);
+    const val = this.ram_read(this.pc + 2);
+    this.reg[reg_a] = val;
+    this.pc += 2;
+  }
+  
+  handle_st() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const val = this.reg[this.ram_read(this.pc + 2)];
+    this.reg[reg_a] = val;
+    this.pc += 2;
+  }
+
+  handle_inc() {
+    const reg_a = this.ram_read(this.pc + 1);
+    this.alu(INC, reg_a, null);
+    this.pc += 1;
+  }
+
+  handle_dec() {
+    const reg_a = this.ram_read(this.pc + 1);
+    this.alu(DEC, reg_a, null);
+    this.pc += 1;
+  }
+
+  handle_dec() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(ADD, reg_a, reg_b);
+    this.pc += 2;
+  }
+
+  handle_add() {
+    // TEMP implemented?
+    this.pc += 2;
+  }
+  
+  handle_sub() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(SUB, reg_a, reg_b);
+    this.pc += 2;
+  }
+  
+  handle_mod() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(MOD, reg_a, reg_b);
+    this.pc += 2;
+  }
+  
+  handle_and() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(AND, reg_a, reg_b);
+    this.pc += 2;
+  }
+  
+  handle_or() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(OR, reg_a, reg_b);
+    this.pc += 2;
+  }
+
+  handle_xor() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(XOR, reg_a, reg_b);
+    this.pc += 2;
+  }
+
+  handle_not() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(NOT, reg_a, reg_b);
+    this.pc += 2;
+  }
+
+  handle_shl() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(SHL, reg_a, reg_b);
+    this.pc += 2;
+  }
+
+  handle_shr() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(SHR, reg_a, reg_b);
+    this.pc += 2;
+  }
+
+  handle_mul() {
+    const reg_a = this.ram_read(this.pc + 1);
+    const reg_b = this.ram_read(this.pc + 2);
+    this.alu(MUL, reg_a, reg_b);
+    this.pc += 2;
+  }
 }
 
 /**

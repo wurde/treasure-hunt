@@ -22,7 +22,7 @@ const reverseDirection = {
  */
 
 async function pickupTreasure(stack, traversalGraph) {
-  console.log('Pickup treasure.', traversalGraph);
+  console.log('pickupTreasure()', traversalGraph);
   let weightAllowance;
 
   const initStatus = await axiosWithAuth().get(`${baseUrl}/api/adv/init/`);

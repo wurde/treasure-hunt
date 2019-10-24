@@ -7,6 +7,7 @@ import { wait } from "./util";
 import { baseUrl } from "./constants";
 import pickupTreasure from './pickupTreasure';
 import travelTo from './travelTo';
+import sellAllItems from './sellAllItems';
 
 /**
  * Constants
@@ -35,10 +36,8 @@ async function startGoldFarming() {
         weightAllowance = await pickupTreasure(stack, traversalGraph);
       }
 
-      // DEBUG "{"direction":"n","next_room_id":"undefined"}"
-      // await travelTo(shopRoomID);
-      // TODO automate sellAllItems();
-      throw new Error('Sell your stuff!');
+      await travelTo(shopRoomID);
+      await sellAllItems();
     }
   } catch (error) {
     console.error(error);

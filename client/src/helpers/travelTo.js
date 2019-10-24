@@ -3,34 +3,34 @@
  */
 
 import axiosWithAuth from "./axiosWithAuth";
-import { wait, moveWithWiseExplorer, generatePath } from "./util";
+import { wait, moveWithWiseExplorer } from "./util";
 import { baseUrl } from "./constants";
+import generatePath from "./generatePath";
 
 /**
- * Constants
+ * References:
+ *   shopRoomID = 1;
+ *   hollowayShrineRoomID = 22;
+ *   wishingWellRoomID = 55;
+ *   linhShrineRoomID = 461;
+ *   pirateRyRoomID = 467;
+ *   glasowynGraveRoomID = 499;
  */
-
-const shopRoomID = 1;
-const hollowayShrineRoomID = 22;
-const wishingWellRoomID = 55;
-const linhShrineRoomID = 461;
-const pirateRyRoomID = 467;
-const glasowynGraveRoomID = 499;
 
 /**
  * Define helper
  */
 
 async function travelTo(targetRoomID) {
+  console.log('travelTo()');
   try {
     // Get current room information.
     const initStatus = await axiosWithAuth().get(`${baseUrl}/api/adv/init/`);
     await wait(initStatus.data.cooldown);
     let currentRoomID = initStatus.data.room_id;
-    console.log(`From ${currentRoomID} to ${targetRoomID}`);
 
     // Get shortest path to target Room ID.
-    const shortestPath = generatePath(parseInt(currentRoomID), parseInt(targetRoomID));
+    const shortestPath = generatePath(currentRoomID, targetRoomID);
     console.log('shortestPath', shortestPath);
     
     // Move through the maze Following directions.
@@ -38,7 +38,6 @@ async function travelTo(targetRoomID) {
       console.log(`Move currentRoomID(${currentRoomID}) ${shortestPath[i]}`);
       const moveStatus = await moveWithWiseExplorer(currentRoomID, shortestPath[i], 0, true);
       console.log('moveStatus', moveStatus);
-      // data => "{"direction":"n","next_room_id":"undefined"}"
       await wait(moveStatus.data.cooldown);
       currentRoomID = moveStatus.data.room_id;
     }

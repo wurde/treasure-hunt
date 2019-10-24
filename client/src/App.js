@@ -16,9 +16,7 @@ function App() {
       <header className="App-header">
         Maze
         <button onClick={traverseMap}>Traverse Map</button>
-        {/* <button onClick={() => movePlayerToDestination(429)}>
-          Generate path
-        </button> */}
+        <button onClick={() => movePlayerToDestination(495)}>Go To Room</button>
       </header>
     </div>
   );

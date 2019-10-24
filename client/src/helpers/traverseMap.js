@@ -7,7 +7,7 @@ import {
   wait,
   moveWithPerks,
   pickItem,
-  sellItems,
+  sellTreasures,
   pickUpAllPerks,
   movePlayerToDestination,
   examineWishingWell
@@ -62,7 +62,7 @@ async function traverseMap() {
 
       switch (prevRoomID) {
         case 1:
-          await sellItems();
+          await sellTreasures();
           break;
       }
 

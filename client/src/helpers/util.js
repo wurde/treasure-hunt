@@ -10,6 +10,7 @@ const wait = seconds => {
 const pickUpAllPerks = async () => {
   try {
     let shrineRooms = [22, 461, 499];
+
     while (shrineRooms.length > 0) {
       const destinationRoom = shrineRooms.pop(0);
       const finalRoom = await movePlayerToDestination(destinationRoom);
@@ -31,6 +32,7 @@ const examineWishingWell = async () => {
     console.error(err);
   }
 };
+
 const pray = async () => {
   try {
     const prayerResult = await axiosWithAuth().post(`${baseUrl}/api/adv/pray`);
@@ -41,7 +43,7 @@ const pray = async () => {
   }
 };
 
-const sellItems = async () => {
+const sellTreasures = async () => {
   const playerStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/status`);
 
   const playerTreasures = playerStatus.data.inventory.filter(item => {
@@ -87,6 +89,10 @@ const pickItem = async prevRoom => {
     for (let i = 0; i < uniqItems.length; i++) {
       const item = uniqItems[i];
       // inspect item
+      if (item !== "shiny treasure") {
+        await wait(itemStatus.data.cooldown);
+        break;
+      }
       const itemStatus = await axiosWithAuth().post(
         `${baseUrl}/api/adv/examine`,
         { name: item }
@@ -100,7 +106,7 @@ const pickItem = async prevRoom => {
       if (itemWeight > weightAllowance) {
         console.info("Inventory full, going to shop");
         await movePlayerToDestination(1);
-        await sellItems();
+        await sellTreasures();
       } else {
         const takeStatus = await axiosWithAuth().post(
           `${baseUrl}/api/adv/take`,
@@ -225,7 +231,7 @@ export {
   moveWithPerks,
   pickItem,
   generatePath,
-  sellItems,
+  sellTreasures,
   pray,
   pickUpAllPerks,
   movePlayerToDestination,

@@ -2,6 +2,7 @@ import React from "react";
 import traverseMap from "./helpers/traverseMap";
 import travelTo from "./helpers/travelTo";
 import startGoldFarming from "./helpers/startGoldFarming";
+import CheatCodes from './components/cheat-codes/CheatCodes';
 import Sidebar from './components/sidebar/Sidebar.js';
 import Map from './components/map/Map.js';
 import { generatePath } from "./helpers/util";
@@ -18,6 +19,10 @@ function App() {
       <section className="main-section">
         <Map />
         <Sidebar />
+      </section>
+
+      <section>
+        <CheatCodes />
       </section>
 
       <div>

@@ -5,7 +5,7 @@
 import axiosWithAuth from "./axiosWithAuth";
 import {
   wait,
-  moveWithWiseExplorer,
+  moveWithPerks,
   pickItem,
   sellItems,
   pickUpAllPerks,
@@ -65,7 +65,7 @@ async function traverseMap() {
           break;
       }
 
-      const moveRes = await moveWithWiseExplorer(prevRoomID, direction);
+      const moveRes = await moveWithPerks(prevRoomID, direction);
       currentRoomID = moveRes.data.room_id;
       if (!(currentRoomID in traversalGraph)) {
         traversalGraph[currentRoomID] = moveRes.data;

@@ -101,7 +101,7 @@ const pickItem = async prevRoom => {
           const path = generatePath(roomID, 1);
           while (path.length > 0) {
             let moveDirection = path.pop();
-            const newRoom = await moveWithWiseExplorer(roomID, moveDirection);
+            const newRoom = await moveWithPerks(roomID, moveDirection);
             roomID = newRoom.data.room_id;
             await wait(newRoom.data.cooldown);
           }
@@ -141,7 +141,7 @@ const movePlayerToDestination = async destinationRoomId => {
     console.log(movePath, destinationRoomId);
     while (movePath.length > 0) {
       const moveDirection = movePath.pop();
-      const newRoom = await moveWithWiseExplorer(roomId, moveDirection);
+      const newRoom = await moveWithPerks(roomId, moveDirection);
       roomId = newRoom.data.room_id;
       await wait(newRoom.data.cooldown);
     }
@@ -202,7 +202,7 @@ const generatePath = (startRoomId, destinationRoomId) => {
   }
 };
 
-const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
+const moveWithPerks = async (roomId, direction, cooldown = 0) => {
   try {
     // search graph for roomId
     let room = map[roomId];
@@ -219,7 +219,7 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
       next_room_id: `${nextRoomId}`
     };
     const newRoom = await axiosWithAuth().post(
-      `${baseUrl}/api/adv/move/`,
+      `${baseUrl}/api/adv/fly/`,
       postBody
     );
     return newRoom;
@@ -230,7 +230,7 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
 
 export {
   wait,
-  moveWithWiseExplorer,
+  moveWithPerks,
   pickItem,
   generatePath,
   sellItems,

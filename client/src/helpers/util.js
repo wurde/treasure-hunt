@@ -125,7 +125,7 @@ const generatePath = (startRoomId, destinationRoomId) => {
   }
 };
 
-const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
+const moveWithWiseExplorer = async (roomId, direction, cooldown = 0, hasFlight = false) => {
   try {
     // search graph for roomId
     let room = map[roomId];
@@ -136,13 +136,18 @@ const moveWithWiseExplorer = async (roomId, direction, cooldown = 0) => {
       await wait(cooldown);
     }
 
+    let moveEndpoint = `${baseUrl}/api/adv/move/`;
+    if (hasFlight) {
+      moveEndpoint = `${baseUrl}/api/adv/fly/`;
+    }
+
     // make move request with extra next_direction param
     const postBody = {
       direction,
       next_room_id: `${nextRoomId}`
     };
     const newRoom = await axiosWithAuth().post(
-      `${baseUrl}/api/adv/move/`,
+      moveEndpoint,
       postBody
     );
     return newRoom;

@@ -13,6 +13,11 @@ const reverseDirection = {
   w: "e"
 };
 
+/**
+ * Define traversal algorithm
+ */
+
+//  returns a promise that can be used to halt something for an allotted amount of time
 async function traverseMap() {
   const traversalGraph = {};
   const stack = [];

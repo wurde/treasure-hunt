@@ -22,7 +22,7 @@ const reverseDirection = {
   w: "e"
 };
 
-async function traverseMap() {
+async function traverseMap(callback = undefined) {
   const traversalGraph = {};
   const stack = [];
 
@@ -66,7 +66,12 @@ async function traverseMap() {
           break;
       }
 
-      const moveRes = await moveWithPerks(prevRoomID, direction);
+      let moveRes = null;
+      if (callback) {
+        moveRes = await moveWithPerks(prevRoomID, direction, callback);
+      } else {
+        moveRes = await moveWithPerks(prevRoomID, direction);
+      }
 
       currentRoomID = moveRes.data.room_id;
       if (!(currentRoomID in traversalGraph)) {

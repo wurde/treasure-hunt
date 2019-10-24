@@ -1,78 +1,18 @@
 import React, { useState, useEffect } from "react";
 
-import axiosWithAuth from "../../helpers/axiosWithAuth.js";
-import mapData from "../../helpers/map.json";
 import { Button, Alert } from "reactstrap";
-import { wait } from "../../helpers/util";
 import "./Sidebar.scss";
+import traverseMap from "../../helpers/traverseMap";
 
-const baseUrl = "https://lambda-treasure-hunt.herokuapp.com";
-
-const Sidebar = () => {
-  const [currentRoom, setCurrentRoom] = useState("");
-  const [validDirections, setValidDirections] = useState(new Set());
-  const [roomDestination, setRoomDestination] = useState("");
-  const [alertMessage, setAlertMessage] = useState("");
-
-  const selectRoom = async () => {
-    return <Alert color="light">Click a room to move there!</Alert>;
-  };
-  const getRoomData = async () => {
-    const { data } = await axiosWithAuth().get(`${baseUrl}/api/adv/init/`);
-
-    let exits = generateDirections(data.room_id);
-    await setValidDirections(new Set(Object.keys(exits)));
-
-    let stateRoom = { ...data, ...exits };
-    markCurrentRoom(data.room_id);
-    setCurrentRoom(stateRoom);
-  };
-
-  const generateDirections = roomId => {
-    let room = mapData[roomId];
-
-    const exits = {};
-    room.exits.forEach(direction => {
-      exits[direction] = room[direction];
-    });
-
-    return exits;
-  };
-
-  const move = async e => {
-    let { value: direction } = e.target;
-    console.log(direction);
-
-    if (!currentRoom[direction]) {
-      setAlertMessage(`You cannot move ${direction}`);
-      return null;
-    }
-    const moveRes = await axiosWithAuth().post(`${baseUrl}/api/adv/fly/`, {
-      direction,
-      next_room_id: currentRoom[direction].toString()
-    });
-    console.log(moveRes.data);
-
-    setAlertMessage(moveRes.data.messages.join(", "));
-    const exits = generateDirections(moveRes.data.room_id);
-    markCurrentRoom(moveRes.data.room_id);
-    setCurrentRoom({ ...moveRes.data, ...exits });
-  };
-
-  let markCurrentRoom = roomId => {
-    let previousRoom = document.querySelector(`.currentRoom`);
-    if (previousRoom) {
-      previousRoom.classList.remove("currentRoom");
-    }
-    let room = document.querySelector(`div[value='${roomId}']`);
-    room.classList.add("currentRoom");
-    return room;
-  };
-
-  useEffect(() => {
-    getRoomData();
-  }, []);
-
+const Sidebar = ({
+  alertMessage,
+  setAlertMessage,
+  selectedRoom,
+  setIsSelectingRoom,
+  move,
+  currentRoom,
+  getRoomData
+}) => {
   if (currentRoom) {
     let itemsString = currentRoom.items.join(", ");
     let exitsString = currentRoom.exits.join(", ");
@@ -84,15 +24,13 @@ const Sidebar = () => {
             Room #{currentRoom.room_id} : {currentRoom.title}
           </p>
           <p>Description: {currentRoom.description}</p>
-          <p>Message: {currentRoom.message}</p>
           <p>Items: {itemsString}</p>
           <p>Exits: {exitsString} </p>
           <p>Cooldown: {currentRoom.cooldown}</p>
-          <div className="info-box">
-            <Alert color="light">
-              {alertMessage || "Messages will appear here"}
-            </Alert>
-          </div>
+          <p>Currently Selected Room: {selectedRoom}</p>
+          <Alert color="light">
+            {alertMessage || "Messages will appear here"}
+          </Alert>
         </div>
 
         <div className="dpad">
@@ -142,14 +80,25 @@ const Sidebar = () => {
         </div>
 
         <div className="traverse-buttons">
-          <Button className="action-button" color="primary">
-            Traverse Map
+          <Button
+            className="action-button"
+            color="primary"
+            onClick={() => {
+              setAlertMessage(
+                "Traversing randomly. Will pick up gold and autosell"
+              );
+              traverseMap(getRoomData);
+            }}
+          >
+            Traverse Map Randomly
           </Button>
           <Button
             className="action-button"
             color="primary"
-            value={roomDestination}
-            onClick={() => selectRoom()}
+            onClick={() => {
+              setIsSelectingRoom(true);
+              setAlertMessage("Pick a room to move to.");
+            }}
           >
             Go To Room
           </Button>

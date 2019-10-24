@@ -28,6 +28,11 @@ let specialRooms = {
   transmogri: 495
 };
 
+const setSelectedRoom = e => {
+  e.persist();
+  localStorage.setItem("selectedRoom", e.target.innerHTML);
+};
+
 function hasExits(room) {
   let classes = "room";
 
@@ -52,7 +57,7 @@ function hasExits(room) {
   }
 }
 
-const Map = () => {
+const Map = ({ setSelectedRoom }) => {
   return (
     <div className="Map pannel">
       <div className="translucent"></div>
@@ -64,6 +69,7 @@ const Map = () => {
               <div
                 className={hasExits(room).classes}
                 value={hasExits(room).room_id}
+                onClick={e => setSelectedRoom(e)}
               >
                 {room && room.room_id}
               </div>

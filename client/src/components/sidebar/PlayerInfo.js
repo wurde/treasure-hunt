@@ -36,7 +36,7 @@ const PlayerInfo = ({ alertMessage }) => {
           <p>Inventory: {playerInventory || "Empty"}</p>
           <Alert color="light">
             {alertMessage || "Messages will appear here"}
-          </Alert>{" "}
+          </Alert>
         </div>
       </>
     );

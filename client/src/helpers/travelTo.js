@@ -28,7 +28,7 @@ import generatePath from "./generatePath";
  * Define helper
  */
 
-async function travelTo(targetRoomID) {
+async function travelTo(targetRoomID, callback = undefined) {
   console.log("travelTo()");
   try {
     // Get current room information.
@@ -51,6 +51,9 @@ async function travelTo(targetRoomID) {
     for (let i = 0; i < shortestPath.length; i++) {
       console.log(`Move currentRoomID(${currentRoomID}) ${shortestPath[i]}`);
       const moveStatus = await move(currentRoomID, shortestPath[i], 0, true);
+      if (callback) {
+        callback(moveStatus.data);
+      }
       console.log("moveStatus", moveStatus);
       removePathMarker(moveStatus.data.room_id);
       markCurrentRoom(moveStatus.data.room_id);

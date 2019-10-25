@@ -22,8 +22,14 @@ const reverseDirection = {
  * Define helper
  */
 
-async function pickupTreasure(stack, traversalGraph, weightAllowance, currentRoomID) {
-  console.log('pickupTreasure()', traversalGraph);
+async function pickupTreasure(
+  stack,
+  traversalGraph,
+  weightAllowance,
+  currentRoomID,
+  callback = undefined
+) {
+  console.log("pickupTreasure()", traversalGraph);
   let prevRoomID = currentRoomID;
   let prevRoom = traversalGraph[prevRoomID];
 
@@ -49,8 +55,10 @@ async function pickupTreasure(stack, traversalGraph, weightAllowance, currentRoo
 
   if (Object.keys(prevRoom.items).length > 0) {
     // Get current player status
-    const playerStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/status`);
-    console.log('playerStatus', playerStatus);
+    const playerStatus = await axiosWithAuth().post(
+      `${baseUrl}/api/adv/status`
+    );
+    console.log("playerStatus", playerStatus);
     await wait(playerStatus.data.cooldown);
     let encumbrance = playerStatus.data.encumbrance;
     weightAllowance = playerStatus.data.strength - encumbrance - 1;
@@ -59,8 +67,11 @@ async function pickupTreasure(stack, traversalGraph, weightAllowance, currentRoo
     const uniqItems = Array.from(new Set(prevRoom.items));
     for (let i = 0; i < uniqItems.length; i++) {
       const item = uniqItems[i];
-      const itemStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/examine`, { "name": item });
-      console.log('itemStatus', itemStatus);
+      const itemStatus = await axiosWithAuth().post(
+        `${baseUrl}/api/adv/examine`,
+        { name: item }
+      );
+      console.log("itemStatus", itemStatus);
       await wait(itemStatus.data.cooldown);
       itemWeights[item] = itemStatus.data.weight;
     }
@@ -71,10 +82,13 @@ async function pickupTreasure(stack, traversalGraph, weightAllowance, currentRoo
 
       // Check if item weight will exceed player strength if picked up
       if (itemWeight > weightAllowance) {
-        continue
+        continue;
       } else {
-        const takeStatus = await axiosWithAuth().post(`${baseUrl}/api/adv/take`, { "name": item });
-        console.log('takeStatus', takeStatus);
+        const takeStatus = await axiosWithAuth().post(
+          `${baseUrl}/api/adv/take`,
+          { name: item }
+        );
+        console.log("takeStatus", takeStatus);
         await wait(takeStatus.data.cooldown);
         encumbrance += itemWeight;
         weightAllowance = playerStatus.data.strength - encumbrance - 1;
@@ -87,7 +101,10 @@ async function pickupTreasure(stack, traversalGraph, weightAllowance, currentRoo
    */
 
   const moveStatus = await move(prevRoomID, direction, 0, true);
-  console.log('moveStatus', moveStatus);
+  if (callback) {
+    callback(moveStatus.data);
+  }
+  console.log("moveStatus", moveStatus);
   markCurrentRoom(moveStatus.data.room_id);
   await wait(moveStatus.data.cooldown);
   currentRoomID = moveStatus.data.room_id;

@@ -18,7 +18,7 @@ body {
       position: relative;
     }
 
-    .Sidebar{
+    .Sidebar {
       width: 30%;
       position: relative;
     }
@@ -33,6 +33,12 @@ body {
     }
   }
 
+  .colorbox {
+    color: white;
+    display: flex;
+    align-items: baseline;
+    margin: 10px;
+  }
   .translucent {
     position: absolute;
     z-index: -1;
@@ -47,5 +53,12 @@ body {
 
   .text-black {
     color: #000;
+  }
+
+  .home-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-around;
+    background-color: gray;
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { generatePath, movePlayerToDestination } from "./helpers/util";
+import { generatePath, movePlayerToDestination, wait } from "./helpers/util";
 import mapData from "./helpers/map.json";
 
 import axiosWithAuth from "./helpers/axiosWithAuth";
@@ -40,20 +40,24 @@ const App = () => {
       direction,
       next_room_id: currentRoom[direction].toString()
     });
-    console.log(moveRes.data);
 
     setAlertMessage(moveRes.data.messages.join(", "));
     const exits = generateDirections(moveRes.data.room_id);
     markCurrentRoom(moveRes.data.room_id);
     setCurrentRoom({ ...moveRes.data, ...exits });
+
+    await wait(moveRes.data.cooldown);
   };
 
   const getRoomData = async (room = undefined) => {
     if (!room) {
       const { data } = await axiosWithAuth().get(`${baseUrl}/api/adv/init/`);
+      let cooldown = data.cooldown;
+
       let exits = generateDirections(data.room_id);
       room = { ...data, ...exits };
       markCurrentRoom(data.room_id);
+      await wait(cooldown);
     } else {
       let exits = generateDirections(room.room_id);
       room = { ...room, ...exits };

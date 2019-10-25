@@ -165,7 +165,6 @@ const generatePath = async (startRoomId = undefined, destinationRoomId) => {
 
   const queue = [];
   let visitedRooms = new Set();
-  console.log("id from generate path", startRoomId, destinationRoomId);
   let startingRoom = map[startRoomId];
   // add initial room to visited to remove it from the returned path
   visitedRooms.add(startRoomId);

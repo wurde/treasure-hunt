@@ -4,7 +4,7 @@
 
 import axiosWithAuth from "./axiosWithAuth";
 import move from "./move";
-import { wait } from "./util";
+import { wait, markCurrentRoom } from "./util";
 import { baseUrl } from "./constants";
 
 /**
@@ -88,6 +88,7 @@ async function pickupTreasure(stack, traversalGraph, weightAllowance, currentRoo
 
   const moveStatus = await move(prevRoomID, direction, 0, true);
   console.log('moveStatus', moveStatus);
+  markCurrentRoom(moveStatus.data.room_id);
   await wait(moveStatus.data.cooldown);
   currentRoomID = moveStatus.data.room_id;
   if (!(currentRoomID in traversalGraph)) {

@@ -2,9 +2,9 @@
  * Dependencies
  */
 
-import React from 'react';
-import './Map.scss';
-import mapData from '../../helpers/map';
+import React from "react";
+import "./Map.scss";
+import mapData from "../../helpers/map";
 
 /**
  * Build map matrix
@@ -32,7 +32,8 @@ let specialRooms = {
   well: 55,
   shop: 1,
   pirateRy: 467,
-  transmogri: 495
+  transmogri: 495,
+  traps: new Set([242, 302, 339, 361, 415, 422, 426, 457])
 };
 
 const setSelectedRoom = e => {
@@ -55,6 +56,7 @@ function hasExits(room) {
     specialRooms.shop === room_id && (classes += " shop");
     specialRooms.transmogri === room_id && (classes += " transmogri");
     specialRooms.pirateRy === room_id && (classes += " pirate");
+    specialRooms.traps.has(room_id) && (classes += " trap");
     // room.room_id === 356 && (classes += " mine");
     items.length > 0 && (classes += " treasure");
     return { classes, room_id };

@@ -49,20 +49,20 @@
       }
 
       .well {
-        background-color: red;
+        background-color: lightblue;
       }
 
       .shrine {
-        background-color: blue;
+        background-color: plum;
       }
-      .treasure {
-        background-color: lightgrey;
-      }
+      // .treasure {
+      //   background-color: lightgrey;
+      // }
       .pirate {
-        background-color: green;
+        background-color: goldenrod;
       }
       .shop {
-        background-color: lightblue;
+        background-color: lightcyan;
       }
       .transmogri {
         background-color: yellow;
@@ -72,13 +72,17 @@
         background-color: pink;
       }
 
+      .trap {
+        background-color: #f5430ddc;
+      }
       .currentRoom {
-        background: aquamarine;
+        background: lightsalmon;
       }
 
       .travelRoom {
-        background: rgb(0, 0, 0);
-        color: white;
+        background: white;
+        color: black;
+        border: 1px solid rgb(173, 87, 87);
       }
     }
   }

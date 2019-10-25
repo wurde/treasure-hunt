@@ -4,7 +4,13 @@
 
 import axiosWithAuth from "./axiosWithAuth";
 import move from "./move";
-import { wait, markCurrentRoom } from "./util";
+import {
+  wait,
+  markCurrentRoom,
+  displayPath,
+  generatePath as getPathRoomIds,
+  removePathMarker
+} from "./util";
 import { baseUrl } from "./constants";
 import generatePath from "./generatePath";
 
@@ -22,8 +28,8 @@ import generatePath from "./generatePath";
  * Define helper
  */
 
-async function travelTo(targetRoomID) {
-  console.log('travelTo()');
+async function travelTo(targetRoomID, callback = undefined) {
+  console.log("travelTo()");
   try {
     // Get current room information.
     const initStatus = await axiosWithAuth().get(`${baseUrl}/api/adv/init/`);
@@ -32,13 +38,24 @@ async function travelTo(targetRoomID) {
 
     // Get shortest path to target Room ID.
     const shortestPath = generatePath(currentRoomID, targetRoomID);
-    console.log('shortestPath', shortestPath);
-    
+    console.log("shortestPath", shortestPath);
+
+    const { numbers: rooms, directions } = await getPathRoomIds(
+      currentRoomID,
+      targetRoomID
+    );
+
+    displayPath(rooms);
     // Move through the maze Following directions.
+    console.log(rooms);
     for (let i = 0; i < shortestPath.length; i++) {
       console.log(`Move currentRoomID(${currentRoomID}) ${shortestPath[i]}`);
       const moveStatus = await move(currentRoomID, shortestPath[i], 0, true);
-      console.log('moveStatus', moveStatus);
+      if (callback) {
+        callback(moveStatus.data);
+      }
+      console.log("moveStatus", moveStatus);
+      removePathMarker(moveStatus.data.room_id);
       markCurrentRoom(moveStatus.data.room_id);
       await wait(moveStatus.data.cooldown);
       currentRoomID = moveStatus.data.room_id;

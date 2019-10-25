@@ -366,8 +366,8 @@ async function examineWishingWell() {
 
     const cpu = new CPU();
     const description = examineStatus.data.description;
-    cpu.load(description);
-    cpu.run();
+    // cpu.load(description);
+    // cpu.run();
 
     return true;
   } catch (error) {

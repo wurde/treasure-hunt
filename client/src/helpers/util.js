@@ -134,7 +134,7 @@ const movePlayerToDestination = async (
 
     await wait(roomInfo.data.cooldown);
 
-    markRoomPath(moveIds);
+    displayPath(moveIds);
 
     while (movePath.length > 0) {
       const moveDirection = movePath.pop();
@@ -153,10 +153,13 @@ const movePlayerToDestination = async (
 };
 
 const generatePath = async (startRoomId = undefined, destinationRoomId) => {
+  startRoomId = parseInt(startRoomId);
+  destinationRoomId = parseInt(destinationRoomId);
   if (!startRoomId) {
     const initData = await axiosWithAuth().get(`${baseUrl}/api/adv/init`);
 
     startRoomId = initData.data.room_id;
+
     await wait(initData.data.cooldown);
   }
 
@@ -254,7 +257,7 @@ const removePathMarker = roomId => {
   const room = document.querySelector(`div[value='${roomId}']`);
   room.classList.remove("travelRoom");
 };
-const markRoomPath = roomIdArray => {
+const displayPath = roomIdArray => {
   let roomNodes = roomIdArray.map(id => {
     return document.querySelector(`div[value='${id}']`);
   });
@@ -273,5 +276,6 @@ export {
   movePlayerToDestination,
   examineWishingWell,
   markCurrentRoom,
-  markRoomPath
+  displayPath,
+  removePathMarker
 };

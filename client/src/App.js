@@ -11,8 +11,9 @@ import { markCurrentRoom } from "./helpers/util";
 
 import Sidebar from "./components/sidebar/Sidebar";
 import Map from "./components/map/Map";
-import CheatCodes from './components/cheat-codes/CheatCodes';
+import CheatCodes from "./components/cheat-codes/CheatCodes";
 
+import ColorBox from "./components/ColorBox";
 const baseUrl = "https://lambda-treasure-hunt.herokuapp.com";
 
 /**
@@ -38,7 +39,6 @@ const App = () => {
 
   const move = async e => {
     let { value: direction } = e.target;
-    console.log(direction);
 
     if (!currentRoom[direction]) {
       setAlertMessage(`You cannot move ${direction}`);
@@ -73,6 +73,12 @@ const App = () => {
     setCurrentRoom(room);
   };
 
+  const generateMovementMessage = async roomid => {
+    const { directions } = await generatePath(null, roomid);
+
+    setAlertMessage(`Moving to room ${roomid} in ${directions.length} steps `);
+  };
+
   const handleSelectedRoom = async e => {
     if (isSelectingRoom) {
       e.persist();
@@ -80,12 +86,7 @@ const App = () => {
       const targetRoomId = parseInt(e.target.innerHTML);
       setSelectedRoom(targetRoomId);
 
-      const { directions, numbers } = await generatePath(null, targetRoomId);
-
-      setAlertMessage(
-        `Moving to room ${targetRoomId} in ${directions.length} steps `
-      );
-
+      await generateMovementMessage(targetRoomId);
       await movePlayerToDestination(targetRoomId, getRoomData);
       setIsSelectingRoom(false);
       setAlertMessage("Moves completed ");
@@ -100,7 +101,16 @@ const App = () => {
 
   return (
     <div className="App">
-      <h1 className="title">Treasure Hunter</h1>
+      <header className="home-header">
+        <h3>Legend</h3>
+        <ColorBox color="lightblue" text="Wishing Well" />
+        <ColorBox color="plum" text="Shrine" />
+        <ColorBox color="goldenrod" text="Pirate Ry" />
+        <ColorBox color="lightcyan" text="Shop" />
+        <ColorBox color="yellow" text="Transmogrifier" />
+        <ColorBox color="lightsalmon" text="Player" />
+        <ColorBox color="#f5430ddc" text="Trap" />
+      </header>
       <section className="section">
         <Map setSelectedRoom={handleSelectedRoom} />
         <Sidebar
@@ -118,7 +128,10 @@ const App = () => {
 
       <section className="cheat-codes">
 		<h2 className="cc-title">Cheat Codes</h2>
-        <CheatCodes />
+        <CheatCodes
+          generateMovementMessage={generateMovementMessage}
+          getRoomData={getRoomData}
+        />
       </section>
 
       <h4 className='footer-tag'>{"Made with </> by "}

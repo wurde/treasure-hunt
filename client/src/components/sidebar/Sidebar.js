@@ -23,7 +23,6 @@ const Sidebar = ({
   getRoomData
 }) => {
   const [isViewingPlayerInfo, setIsViewingPlayerInfo] = useState(false);
-  if (currentRoom) {
     return (
       <div className="Sidebar pannel">
         <div className="translucent"></div>
@@ -111,10 +110,7 @@ const Sidebar = ({
 	        </div>
 	    </div>
       </div>
-    );
-  } else {
-    return null;
-  }
+  );
 };
 
 /**

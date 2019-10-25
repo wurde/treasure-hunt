@@ -1,78 +1,98 @@
 .Sidebar {
-  // padding: 0 2%;
+	display: flex;
+	flex-direction: column;
 
-  .console {
-    width: 100%;
-    height: 40%; // 260px;
-    background-color: black;
-    border-radius: 12px;
-    padding: 5%;
+	.console {
+		width: 100%;
+		max-height: 100%;
+		background-color: black;
+		border-radius: 12px;
+		padding: 5%;
 
-    p {
-      font-size: 14px;
-      // line-height: 0.4;
-      margin-bottom: 10px;
-    }
-  }
+		h3 {
+			border-bottom: 1px dashed white;
+			margin-bottom: 20px;
+			padding-bottom: 4px;
+		}
 
-  .dpad {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 2rem 0;
-    // border-radius: 20px;
+		p {
+			font-size: 14px;
+			margin-bottom: 10px;
+		}
 
-    .round-button {
-      width: 64px;
-      height: 62px;
-      border-radius: 50%;
-    }
+		.alert {
+			margin-top: 26px;
+		}
+	}
 
-    .N {}
-    .E {
-      margin-left: 22px;
-    }
-    .W {
-      margin-right: 22px;
-    }
-    .S {}
+	.dpad {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		margin: 3rem 0;
+		// border-radius: 20px;
 
-    .center {}
-  }
+	    .round-button {
+			width: 62px;
+			height: 60px;
+			border-radius: 50%;
+			// font-size: 1.1rem;
+	    }
 
-  .action-buttons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 50px;
+		.N {}
+		.E {
+			margin-left: 22px;
+		}
+		.W {
+			margin-right: 22px;
+		}
+		.S {}
+		.center {}
+	}
 
-    .action-button {
-      width: 96px;
-      padding: 6px;
-      font-size: 18px;
-    }
-  }
+	.action-button {
+		// width: 96px;
+		// padding: 6px;
+		// font-size: 18px;
+		border-radius: 18px;
+	}
 
-  .traverse-buttons {
-    display: flex;
-    justify-content: space-around;
-  }
+	.action-buttons {
+		display: flex;
+		justify-content: flex-end;
 
-  .info-box {
-    margin-top: 15px;
-    text-align: center;
-  }
-  @media screen and (max-width: 835px) {
-    .dpad {
-      .round-button {
-        margin: 5px 0;
-      }
 
-      .center {
-        display: flex;
-        flex-direction: column;
-      }
-    }
-  }
+		.fas {
+			margin: 14px 22px 0 0;
+			margin-left: 14px;
+			position: absolute;
+			color: #007BFF;
+		}
+	}
+
+	.traverse-buttons {
+		max-height: 100%;
+		display: flex;
+		justify-content: space-around;
+	}
+
+	.info-box {
+		margin-top: 15px;
+		text-align: center;
+	}
+
+	@media screen and (max-width: 835px) {
+		.dpad {
+			.round-button {
+				margin: 5px 0;
+			}
+
+			.center {
+				display: flex;
+				flex-direction: column;
+			}
+		}
+	}
 }

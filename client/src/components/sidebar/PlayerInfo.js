@@ -27,7 +27,7 @@ const PlayerInfo = ({ alertMessage }) => {
     return (
       <>
         <div className="console">
-          <p>Name: {playerDetails.name}</p>
+          <h3>{playerDetails.name}</h3>
           <p>Strength: {playerDetails.strength}</p>
           <p>Speed: {playerDetails.speed}</p>
           <p>Gold: {playerDetails.gold}</p>

@@ -24,7 +24,6 @@ function CheatCodes() {
 			<div className="translucent"></div>
 
 			<div class="p-2">
-				<h3 className="text-black">Cheat Codes</h3>
 				<button onClick={askTravelTo} className="m-1 btn btn-sm btn-primary">Go To Room</button>
 				<button onClick={e => travelTo(1)} className="m-1 btn btn-sm btn-primary">Go To Shop</button>
 				<button onClick={e => travelTo(467)} className="m-1 btn btn-sm btn-primary">Go To Pirate Ry's</button>

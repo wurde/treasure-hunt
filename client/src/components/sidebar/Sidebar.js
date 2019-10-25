@@ -27,6 +27,7 @@ const Sidebar = ({
     return (
       <div className="Sidebar pannel">
         <div className="translucent"></div>
+
         {isViewingPlayerInfo ? (
           <PlayerInfo alertMessage={alertMessage} />
         ) : (
@@ -36,6 +37,13 @@ const Sidebar = ({
             alertMessage={alertMessage}
           />
         )}
+
+        <div className="action-buttons">
+            {isViewingPlayerInfo 
+            	? <i class="fas fa-toggle-on fa-3x" onClick={() => setIsViewingPlayerInfo(!isViewingPlayerInfo)}></i>
+            	: <i class="fas fa-toggle-off fa-3x" onClick={() => setIsViewingPlayerInfo(!isViewingPlayerInfo)}></i>
+           	}
+        </div>
 
         <div className="dpad">
           <Button
@@ -74,17 +82,18 @@ const Sidebar = ({
           </Button>
         </div>
 
-        <div className="action-buttons">
+
+        <div className="traverse-buttons">
           <Button
             className="action-button"
             color="primary"
-            onClick={() => setIsViewingPlayerInfo(!isViewingPlayerInfo)}
+            onClick={() => {
+              setIsSelectingRoom(true);
+              setAlertMessage("Pick a room to move to.");
+            }}
           >
-            {isViewingPlayerInfo ? "View Room" : "View Player Details"}
+            Go To Room
           </Button>
-        </div>
-
-        <div className="traverse-buttons">
           <Button
             className="action-button"
             color="primary"
@@ -96,16 +105,6 @@ const Sidebar = ({
             }}
           >
             Traverse Map Randomly
-          </Button>
-          <Button
-            className="action-button"
-            color="primary"
-            onClick={() => {
-              setIsSelectingRoom(true);
-              setAlertMessage("Pick a room to move to.");
-            }}
-          >
-            Go To Room
           </Button>
         </div>
       </div>

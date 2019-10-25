@@ -22,14 +22,25 @@ body {
       width: 30%;
       position: relative;
     }
+  }
 
-    .CheatCodes {
-      width: 100%;
-      position: relative;
+  .cheat-codes {
+    display: flex;
+    flex-direction: column;
+
+    .cc-title {
+      margin: 0 auto 6px;
+
     }
 
-    .pannel {
-      margin: 0.7%;
+    .CheatCodes {
+      position: relative;
+      margin: 0 auto;
+
+      .p-2 {
+        display: flex;
+        justify-content: center;
+      }
     }
   }
 
@@ -45,7 +56,22 @@ body {
     right: 0;
   }
 
+  .pannel {
+    margin: 0.7%;
+  }
+
   .text-black {
     color: #000;
+  }
+
+  .footer-tag {
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 19px;
+
+    .team {
+      color: white;
+    }
   }
 }

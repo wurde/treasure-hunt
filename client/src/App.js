@@ -116,11 +116,16 @@ const App = () => {
         />
       </section>
 
-      <section className="section">
+      <section className="cheat-codes">
+		<h2 className="cc-title">Cheat Codes</h2>
         <CheatCodes />
       </section>
 
-      <header className="App-header">Maze</header>
+      <h4 className='footer-tag'>{"Made with </> by "}
+      	<a className="team" href='https://github.com/wurde'>Andy</a>{", "}
+      	<a className="team" href='https://github.com/lappjeff'>Jeff</a>{", and "}
+      	<a className="team" href='https://github.com/krislidimo'>Krisli</a>
+      </h4>
     </div>
   );
 };

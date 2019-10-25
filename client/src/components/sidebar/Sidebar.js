@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+/**
+ * Dependencies
+ */
 
+import React from "react";
 import { Button, Alert } from "reactstrap";
 import "./Sidebar.scss";
 import traverseMap from "../../helpers/traverseMap";
 import PlayerInfo from "./PlayerInfo";
 import RoomInfo from "./RoomInfo";
+
+/**
+ * Define component
+ */
+
 const Sidebar = ({
   alertMessage,
   setAlertMessage,
@@ -106,5 +114,9 @@ const Sidebar = ({
     return null;
   }
 };
+
+/**
+ * Export component
+ */
 
 export default Sidebar;

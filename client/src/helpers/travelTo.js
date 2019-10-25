@@ -3,7 +3,8 @@
  */
 
 import axiosWithAuth from "./axiosWithAuth";
-import { wait, moveWithWiseExplorer } from "./util";
+import move from "./move";
+import { wait } from "./util";
 import { baseUrl } from "./constants";
 import generatePath from "./generatePath";
 
@@ -36,7 +37,7 @@ async function travelTo(targetRoomID) {
     // Move through the maze Following directions.
     for (let i = 0; i < shortestPath.length; i++) {
       console.log(`Move currentRoomID(${currentRoomID}) ${shortestPath[i]}`);
-      const moveStatus = await moveWithWiseExplorer(currentRoomID, shortestPath[i], 0, true);
+      const moveStatus = await move(currentRoomID, shortestPath[i], 0, true);
       console.log('moveStatus', moveStatus);
       await wait(moveStatus.data.cooldown);
       currentRoomID = moveStatus.data.room_id;

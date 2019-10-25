@@ -10,40 +10,42 @@ body {
 .App {
   margin: 0 10%;
 
-  .title {
-    
-  }
-
-  .main-section {
+  .section {
     display: flex;
 
     .Map {
       width: 70%;
-      position:relative;
-      // border-radius: 12px;
-      // background-color: white;
-      // opacity: 0.4;
+      position: relative;
     }
 
     .Sidebar{
       width: 30%;
-      position:relative;
+      position: relative;
+    }
+
+    .CheatCodes {
+      width: 100%;
+      position: relative;
     }
 
     .pannel {
       margin: 0.7%;
     }
+  }
 
-    .translucent {
-      position: absolute;
-      z-index: -1;
-      background-color: white;
-      border-radius: 12px;
-      opacity: 0.6;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
+  .translucent {
+    position: absolute;
+    z-index: -1;
+    background-color: white;
+    border-radius: 12px;
+    opacity: 0.6;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .text-black {
+    color: #000;
   }
 }

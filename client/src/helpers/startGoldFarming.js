@@ -3,7 +3,7 @@
  */
 
 import axiosWithAuth from "./axiosWithAuth";
-import { wait } from "./util";
+import { wait, markCurrentRoom } from "./util";
 import { baseUrl } from "./constants";
 import pickupTreasure from './pickupTreasure';
 import travelTo from './travelTo';

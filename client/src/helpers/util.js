@@ -127,22 +127,23 @@ const movePlayerToDestination = async (
 
     let roomId = roomInfo.data.room_id;
 
-    const { directions: movePath } = await generatePath(
+    const { directions: movePath, numbers: moveIds } = await generatePath(
       roomId,
       destinationRoomId
     );
 
-    console.log("move path", movePath);
-
     await wait(roomInfo.data.cooldown);
+
+    markRoomPath(moveIds);
 
     while (movePath.length > 0) {
       const moveDirection = movePath.pop();
       const newRoom = await moveWithPerks(roomId, moveDirection);
+      roomId = newRoom.data.room_id;
+      removePathMarker(roomId);
       if (callback) {
         callback(newRoom.data);
       }
-      roomId = newRoom.data.room_id;
       markCurrentRoom(roomId);
       await wait(newRoom.data.cooldown);
     }
@@ -250,6 +251,19 @@ const markCurrentRoom = roomId => {
   room.classList.add("currentRoom");
   return room;
 };
+
+const removePathMarker = roomId => {
+  const room = document.querySelector(`div[value='${roomId}']`);
+  room.classList.remove("travelRoom");
+};
+const markRoomPath = roomIdArray => {
+  let roomNodes = roomIdArray.map(id => {
+    return document.querySelector(`div[value='${id}']`);
+  });
+  roomNodes.forEach(room => {
+    room.classList.add("travelRoom");
+  });
+};
 export {
   wait,
   moveWithPerks,
@@ -260,5 +274,6 @@ export {
   pickUpAllPerks,
   movePlayerToDestination,
   examineWishingWell,
-  markCurrentRoom
+  markCurrentRoom,
+  markRoomPath
 };

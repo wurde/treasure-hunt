@@ -8,10 +8,10 @@ const RoomInfo = ({ currentRoom, selectedRoom, alertMessage }) => {
     return (
       <>
         <div className="console">
-          <p>
+          <h3>
             Room #{currentRoom.room_id} : {currentRoom.title}
-          </p>
-          <p>Description: {currentRoom.description}</p>
+          </h3>
+          <p className="description" >Description: {currentRoom.description}</p>
           <p>Items: {itemsString}</p>
           <p>Exits: {exitsString} </p>
           <p>Cooldown: {currentRoom.cooldown}</p>

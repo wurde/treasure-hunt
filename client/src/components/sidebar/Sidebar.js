@@ -23,91 +23,93 @@ const Sidebar = ({
   getRoomData
 }) => {
   const [isViewingPlayerInfo, setIsViewingPlayerInfo] = useState(false);
-  return (
-    <div className="Sidebar pannel">
-      <div className="translucent"></div>
-      {isViewingPlayerInfo ? (
-        <PlayerInfo alertMessage={alertMessage} />
-      ) : (
-        <RoomInfo
-          currentRoom={currentRoom}
-          selectedRoom={selectedRoom}
-          alertMessage={alertMessage}
-        />
-      )}
+    return (
+      <div className="Sidebar pannel">
+        <div className="translucent"></div>
 
-      <div className="dpad">
-        <Button
-          className="round-button N"
-          color="primary"
-          value="n"
-          onClick={e => move(e)}
-        >
-          N
-        </Button>
-        <div className="center">
-          <Button
-            className="round-button W"
-            color="primary"
-            value="w"
-            onClick={e => move(e)}
-          >
-            W
-          </Button>
-          <Button
-            className="round-button E"
-            color="primary"
-            value="e"
-            onClick={e => move(e)}
-          >
-            E
-          </Button>
+        {isViewingPlayerInfo ? (
+          <PlayerInfo alertMessage={alertMessage} />
+        ) : (
+          <RoomInfo
+            currentRoom={currentRoom}
+            selectedRoom={selectedRoom}
+            alertMessage={alertMessage}
+          />
+        )}
+
+        <div className="player-room-toggle">
+            {isViewingPlayerInfo 
+            	? <i class="fas fa-toggle-on fa-2x" onClick={() => setIsViewingPlayerInfo(!isViewingPlayerInfo)}></i>
+            	: <i class="fas fa-toggle-off fa-2x" onClick={() => setIsViewingPlayerInfo(!isViewingPlayerInfo)}></i>
+           	}
         </div>
-        <Button
-          className="round-button S"
-          color="primary"
-          value="s"
-          onClick={e => move(e)}
-        >
-          S
-        </Button>
-      </div>
+        
+        <div className="bottom-half">
 
-      <div className="action-buttons">
-        <Button
-          className="action-button"
-          color="primary"
-          onClick={() => setIsViewingPlayerInfo(!isViewingPlayerInfo)}
-        >
-          {isViewingPlayerInfo ? "View Room" : "View Player Details"}
-        </Button>
-      </div>
+	        <div className="dpad">
+	          <Button
+	            className="round-button N"
+	            color="primary"
+	            value="n"
+	            onClick={e => move(e)}
+	          >
+	            N
+	          </Button>
+	          <div className="center">
+	            <Button
+	              className="round-button W"
+	              color="primary"
+	              value="w"
+	              onClick={e => move(e)}
+	            >
+	              W
+	            </Button>
+	            <Button
+	              className="round-button E"
+	              color="primary"
+	              value="e"
+	              onClick={e => move(e)}
+	            >
+	              E
+	            </Button>
+	          </div>
+	          <Button
+	            className="round-button S"
+	            color="primary"
+	            value="s"
+	            onClick={e => move(e)}
+	          >
+	            S
+	          </Button>
+	        </div>
 
-      <div className="traverse-buttons">
-        <Button
-          className="action-button"
-          color="primary"
-          onClick={() => {
-            setAlertMessage(
-              "Traversing randomly. Will pick up gold and autosell"
-            );
-            traverseMap(getRoomData);
-          }}
-        >
-          Traverse Map Randomly
-        </Button>
-        <Button
-          className="action-button"
-          color="primary"
-          onClick={() => {
-            setIsSelectingRoom(true);
-            setAlertMessage("Pick a room to move to.");
-          }}
-        >
-          Go To Room
-        </Button>
+
+	        <div className="traverse-buttons">
+	          <Button
+	            className="action-button"
+	            color="primary"
+	            onClick={() => {
+	              setIsSelectingRoom(true);
+	              setAlertMessage("Pick a room to move to.");
+	            }}
+	          >
+	            Go To Room
+	          </Button>
+	          <Button
+	            className="action-button"
+	            color="primary"
+	            onClick={() => {
+	              setAlertMessage(
+	                "Traversing randomly. Will pick up gold and autosell"
+	              );
+	              traverseMap(getRoomData);
+	            }}
+	          >
+	            Traverse Map Randomly
+	          </Button>
+	        </div>
+	    </div>
       </div>
-    </div>
   );
 };
 

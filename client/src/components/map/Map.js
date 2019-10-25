@@ -1,7 +1,14 @@
-import React from "react";
-import "./Map.scss";
+/**
+ * Dependencies
+ */
 
-import mapData from "../../helpers/map.json";
+import React from 'react';
+import './Map.scss';
+import mapData from '../../helpers/map';
+
+/**
+ * Build map matrix
+ */
 
 let mapMatrix = [];
 for (let i = 0; i < 29; i++) {
@@ -80,5 +87,9 @@ const Map = ({ setSelectedRoom }) => {
     </div>
   );
 };
+
+/**
+ * Export component
+ */
 
 export default Map;

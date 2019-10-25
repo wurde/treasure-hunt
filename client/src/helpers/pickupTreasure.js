@@ -3,7 +3,8 @@
  */
 
 import axiosWithAuth from "./axiosWithAuth";
-import { wait, moveWithWiseExplorer } from "./util";
+import move from "./move";
+import { wait } from "./util";
 import { baseUrl } from "./constants";
 
 /**
@@ -85,7 +86,7 @@ async function pickupTreasure(stack, traversalGraph, weightAllowance, currentRoo
    * Move to the next room.
    */
 
-  const moveStatus = await moveWithWiseExplorer(prevRoomID, direction, 0, true);
+  const moveStatus = await move(prevRoomID, direction, 0, true);
   console.log('moveStatus', moveStatus);
   await wait(moveStatus.data.cooldown);
   currentRoomID = moveStatus.data.room_id;

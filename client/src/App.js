@@ -1,15 +1,23 @@
+/**
+ * Dependencies
+ */
+
 import React, { useState, useEffect } from "react";
 import { generatePath, movePlayerToDestination } from "./helpers/util";
-import mapData from "./helpers/map.json";
+import mapData from "./helpers/map";
 
 import axiosWithAuth from "./helpers/axiosWithAuth";
 import { markCurrentRoom } from "./helpers/util";
 
-import Sidebar from "./components/sidebar/Sidebar.js";
-import traverseMap from "./helpers/traverseMap";
-import Map from "./components/map/Map.js";
+import Sidebar from "./components/sidebar/Sidebar";
+import Map from "./components/map/Map";
+import CheatCodes from './components/cheat-codes/CheatCodes';
 
 const baseUrl = "https://lambda-treasure-hunt.herokuapp.com";
+
+/**
+ * Define component
+ */
 
 const App = () => {
   const [selectedRoom, setSelectedRoom] = useState("None");
@@ -89,7 +97,7 @@ const App = () => {
   return (
     <div className="App">
       <h1 className="title">Treasure Hunter</h1>
-      <section className="main-section">
+      <section className="section">
         <Map setSelectedRoom={handleSelectedRoom} />
         <Sidebar
           alertMessage={alertMessage}
@@ -104,9 +112,17 @@ const App = () => {
         />
       </section>
 
+      <section className="section">
+        <CheatCodes />
+      </section>
+
       <header className="App-header">Maze</header>
     </div>
   );
 };
+
+/**
+ * Export component
+ */
 
 export default App;

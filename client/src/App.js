@@ -11,7 +11,7 @@ import { markCurrentRoom } from "./helpers/util";
 
 import Sidebar from "./components/sidebar/Sidebar";
 import Map from "./components/map/Map";
-import CheatCodes from './components/cheat-codes/CheatCodes';
+import CheatCodes from "./components/cheat-codes/CheatCodes";
 
 const baseUrl = "https://lambda-treasure-hunt.herokuapp.com";
 
@@ -73,6 +73,11 @@ const App = () => {
     setCurrentRoom(room);
   };
 
+  const generateMovementMessage = async roomid => {
+    const { directions } = await generatePath(null, roomid);
+
+    setAlertMessage(`Moving to room ${roomid} in ${directions.length} steps `);
+  };
   const handleSelectedRoom = async e => {
     if (isSelectingRoom) {
       e.persist();
@@ -80,12 +85,7 @@ const App = () => {
       const targetRoomId = parseInt(e.target.innerHTML);
       setSelectedRoom(targetRoomId);
 
-      const { directions, numbers } = await generatePath(null, targetRoomId);
-
-      setAlertMessage(
-        `Moving to room ${targetRoomId} in ${directions.length} steps `
-      );
-
+      generateMovementMessage(targetRoomId);
       await movePlayerToDestination(targetRoomId, getRoomData);
       setIsSelectingRoom(false);
       setAlertMessage("Moves completed ");
@@ -117,7 +117,7 @@ const App = () => {
       </section>
 
       <section className="section">
-        <CheatCodes />
+        <CheatCodes generateMovementMessage={generateMovementMessage} />
       </section>
 
       <header className="App-header">Maze</header>

@@ -2,7 +2,7 @@
  * Dependencies
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { Button, Alert } from "reactstrap";
 import "./Sidebar.scss";
 import traverseMap from "../../helpers/traverseMap";

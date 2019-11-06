@@ -10,10 +10,6 @@ Build Sprints, which occur at the end of each Unit, provide students with a uniq
 
 ![GIF of Treasure Hunt](img/treasure-hunt.gif)
 
-## Getting started
-
-TODO
-
 ## License
 
 Treasure Hunt is released under the [MIT License](http://www.opensource.org/licenses/MIT).

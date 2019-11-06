@@ -1,7 +1,7 @@
 {
   "name": "treasure-hunt",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lambda School Treasure Hunt (CS Build Week 2)",
   "private": true,
   "scripts": {
     "start": "npm start --prefix client"

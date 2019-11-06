@@ -4,7 +4,8 @@
   "description": "Lambda School Treasure Hunt (CS Build Week 2)",
   "private": true,
   "scripts": {
-    "start": "npm start --prefix client"
+    "start": "npm start --prefix client",
+    "install": "npm install --prefix client"
   },
   "repository": {
     "type": "git",

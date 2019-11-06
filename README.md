@@ -6,6 +6,10 @@ As part of a small team I competed against fellow students at [Lambda School](ht
 
 Build Sprints, which occur at the end of each Unit, provide students with a unique, hands-on opportunity to **apply the skills** they have learned thus far. The hands-on experience helps solidify the content students have learned in previous Sprints.
 
+## Preview
+
+![GIF of Treasure Hunt](img/treasure-hunt.gif)
+
 ## Getting started
 
 TODO
